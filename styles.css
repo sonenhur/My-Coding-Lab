@@ -29,12 +29,13 @@ body {
   display: none;
 }
 .game-board {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
   gap: 10px;
   width: 100%;
-  max-width: 480px;
+  max-width: 480px; /* 게임판의 최대 너비 설정 */
   margin: 0 auto;
+  padding: 10px; /* 게임판 내부 여백 설정 */
 }
 .card {
   width: calc(25% - 10px);
@@ -77,15 +78,26 @@ body {
   cursor: default; /* 매칭된 카드는 클릭할 수 없게 설정 */
 }
 
-@media (max-width: 600px) {
+/* 모바일 및 태블릿 화면 크기에 맞게 카드 크기 조정 */
+@media (max-width: 768px) {
+  .game-board {
+    max-width: 100%;
+    padding: 5px;
+  }
+
   .card {
-    width: calc(33.333% - 10px);
-    padding-bottom: calc(33.333% - 10px);
+    width: 100%;
+    padding-bottom: 100%; /* 카드 비율 유지 */
   }
 }
-@media (max-width: 400px) {
-  .card {
-    width: calc(50% - 10px);
-    padding-bottom: calc(50% - 10px);
+
+@media (max-width: 480px) {
+  #startButton {
+    font-size: 14px;
+  }
+
+  #timer,
+  #record {
+    font-size: 16px;
   }
 }
