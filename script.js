@@ -49,7 +49,7 @@ let timerInterval;
 document.getElementById('startButton').addEventListener('click', startGame);
 
 function adjustCardSize() {
-    const cardSize = Math.min(window.innerWidth / 4, 120); // 화면 너비에 따라 카드 크기 조정
+    const cardSize = Math.min(window.innerWidth / 6, 80); // 화면 너비에 따라 카드 크기 조정, 더 작게 설정
     document.querySelectorAll('.card').forEach(card => {
         card.style.width = `${cardSize}px`;
         card.style.paddingBottom = `${cardSize}px`; // 비율 유지
@@ -114,7 +114,7 @@ function flipCard(card) {
                 endGame(); // 게임 종료 시 기록 표시
             }
             lockBoard = false; // 보드 잠금 해제
-        }, 500); // 카드 뒤집기 지연 시간
+        }, 300); // 카드 뒤집기 지연 시간
     }
 }
 
@@ -126,7 +126,7 @@ function checkMatch(cards) {
     if (cards[0].dataset.name === cards[1].dataset.name) {
         cards.forEach(card => card.classList.add('matched'));
     } else {
-        cards.forEach(card => setTimeout(() => unflipCard(card), 500)); // 카드가 다시 뒤집히는 시간
+        cards.forEach(card => setTimeout(() => unflipCard(card), 300)); // 카드가 다시 뒤집히는 시간
     }
 }
 
