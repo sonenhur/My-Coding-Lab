@@ -4,7 +4,7 @@ const cardsArray = [
     { name: 'grape', img: 'images/grape.png' },
     { name: 'lemon', img: 'images/lemon.png' },
     { name: 'orange', img: 'images/orange.png' },
-    { name: 'pear', img: 'images/pear.png' },
+    { name: 'peach', img: 'images/peach.png' },
     { name: 'strawberry', img: 'images/strawberry.png' },
     { name: 'watermelon', img: 'images/watermelon.png' }
 ];
@@ -15,7 +15,7 @@ let firstGuess = '';
 let secondGuess = '';
 let count = 0;
 let previousTarget = null;
-let delay = 1200;
+const delay = 1200;
 
 function createBoard() {
     gameGrid.forEach(item => {
@@ -24,8 +24,15 @@ function createBoard() {
         card.dataset.name = item.name;
 
         const front = document.createElement('img');
+        front.classList.add('front');
         front.src = item.img;
+
+        const back = document.createElement('div');
+        back.classList.add('back');
+        back.textContent = '?';
+
         card.appendChild(front);
+        card.appendChild(back);
 
         memoryGame.appendChild(card);
     });
