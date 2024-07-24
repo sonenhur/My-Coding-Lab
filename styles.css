@@ -81,7 +81,7 @@ body {
 }
 
 .card .back {
-  background: #6884b3;
+  background: #808080;
   color: #fff;
   display: flex;
   justify-content: center;
@@ -93,7 +93,7 @@ body {
 }
 
 .card.matched {
-  background: #0f0;
+  background: #6884b3;
   cursor: default;
 }
 
