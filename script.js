@@ -24,6 +24,17 @@ let timerInterval;
 
 document.getElementById('startButton').addEventListener('click', startGame);
 
+function adjustCardSize() {
+    const cardSize = Math.min(window.innerWidth / 4, 120); // 화면 너비에 따라 카드 크기 조정
+    document.querySelectorAll('.card').forEach(card => {
+        card.style.width = `${cardSize}px`;
+        card.style.paddingBottom = `${cardSize}px`; // 비율 유지
+    });
+}
+
+window.addEventListener('resize', adjustCardSize);
+document.addEventListener('DOMContentLoaded', adjustCardSize);
+
 function startGame() {
     document.getElementById('record').classList.add('hidden');
     document.getElementById('startButton').disabled = true;

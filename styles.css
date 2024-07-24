@@ -36,7 +36,14 @@ body {
 
 .game-board {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 4x4 배열 설정 */
+  grid-template-columns: repeat(
+    4,
+    minmax(100px, 1fr)
+  ); /* 카드의 최소 너비를 설정하고 4열로 배열 */
+  grid-template-rows: repeat(
+    4,
+    minmax(100px, 1fr)
+  ); /* 카드의 최소 높이를 설정하고 4행으로 배열 */
   gap: 10px;
   width: 100%;
   max-width: 480px; /* 게임판의 최대 너비 설정 */
@@ -58,7 +65,8 @@ body {
   transition: transform 0.5s;
 }
 
-.card img, .card .back {
+.card img,
+.card .back {
   width: 100%;
   height: 100%;
   position: absolute;
@@ -102,7 +110,8 @@ body {
     font-size: 14px;
   }
 
-  #timer, #record {
+  #timer,
+  #record {
     font-size: 16px;
   }
 }
