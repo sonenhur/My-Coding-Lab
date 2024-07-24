@@ -1,101 +1,104 @@
-const cardsArray = [
-    { name: 'apple', img: 'images/apple.png' },
-    { name: 'cherry', img: 'images/cherry.png' },
-    { name: 'grape', img: 'images/grape.png' },
-    { name: 'lemon', img: 'images/lemon.png' },
-    { name: 'orange', img: 'images/orange.png' },
-    { name: 'peach', img: 'images/peach.png' },
-    { name: 'strawberry', img: 'images/strawberry.png' },
-    { name: 'watermelon', img: 'images/watermelon.png' }
+const cardData = [
+    ["apple", "images/apple.png"],
+    ["cherry", "images/cherry.png"],
+    ["grape", "images/grape.png"],
+    ["lemon", "images/lemon.png"],
+    ["orange", "images/orange.png"],
+    ["peach", "images/peach.png"],
+    ["strawberry", "images/strawberry.png"],
+    ["watermelon", "images/watermelon.png"],
+    ["apple", "images/apple.png"],
+    ["cherry", "images/cherry.png"],
+    ["grape", "images/grape.png"],
+    ["lemon", "images/lemon.png"],
+    ["orange", "images/orange.png"],
+    ["peach", "images/peach.png"],
+    ["strawberry", "images/strawberry.png"],
+    ["watermelon", "images/watermelon.png"],
 ];
 
-const gameGrid = cardsArray.concat(cardsArray).sort(() => 0.5 - Math.random());
-const memoryGame = document.getElementById('memoryGame');
-let firstGuess = '';
-let secondGuess = '';
-let count = 0;
-let previousTarget = null;
-const delay = 1200;
+let flippedCards = [];
+let lockBoard = false;
+let startTime;
+let timerInterval;
 
-function createBoard() {
-    gameGrid.forEach(item => {
-        const card = document.createElement('div');
-        card.classList.add('memory-card');
-        card.dataset.name = item.name;
+document.getElementById('startButton').addEventListener('click', startGame);
 
-        const front = document.createElement('img');
-        front.classList.add('front');
-        front.src = item.img;
-
-        const back = document.createElement('div');
-        back.classList.add('back');
-        back.textContent = '?';
-
-        card.appendChild(front);
-        card.appendChild(back);
-
-        memoryGame.appendChild(card);
-    });
+function startGame() {
+    document.getElementById('record').classList.add('hidden');
+    document.getElementById('startButton').disabled = true;
+    startTime = new Date();
+    timerInterval = setInterval(updateTimer, 1000);
+    buildGameBoard(cardData);
 }
 
-function resetGuesses() {
-    firstGuess = '';
-    secondGuess = '';
-    count = 0;
-    previousTarget = null;
-
-    const selectedCards = document.querySelectorAll('.selected');
-    selectedCards.forEach(card => {
-        card.classList.remove('selected');
-        card.classList.remove('flipped');
-    });
+function updateTimer() {
+    const elapsedTime = Math.floor((new Date() - startTime) / 1000);
+    const minutes = String(Math.floor(elapsedTime / 60)).padStart(2, '0');
+    const seconds = String(elapsedTime % 60).padStart(2, '0');
+    document.getElementById('timer').textContent = `Time: ${minutes}:${seconds}`;
 }
 
-function match() {
-    const matchedCards = document.querySelectorAll('.selected');
-    matchedCards.forEach(card => {
-        card.classList.add('match');
-    });
+function endGame() {
+    clearInterval(timerInterval);
+    document.getElementById('startButton').disabled = false;
+    const finalTime = document.getElementById('timer').textContent;
+    document.getElementById('record').textContent = `축하합니다! 당신의 기록은: ${finalTime}`;
+    document.getElementById('record').classList.remove('hidden');
 }
 
-memoryGame.addEventListener('click', event => {
-    const clicked = event.target;
+function flipCard(card) {
+    if (lockBoard || card.classList.contains('flipped') || card.classList.contains('matched')) return;
 
-    if (
-        clicked.nodeName === 'DIV' ||
-        clicked === previousTarget ||
-        clicked.parentNode.classList.contains('flipped') ||
-        clicked.parentNode.classList.contains('selected')
-    ) {
-        return;
-    }
+    card.classList.add('flipped');
+    flippedCards.push(card);
 
-    if (count < 2) {
-        count++;
-        if (count === 1) {
-            firstGuess = clicked.parentNode.dataset.name;
-            clicked.parentNode.classList.add('selected');
-            clicked.parentNode.classList.add('flipped');
-        } else {
-            secondGuess = clicked.parentNode.dataset.name;
-            clicked.parentNode.classList.add('selected');
-            clicked.parentNode.classList.add('flipped');
-        }
-
-        if (firstGuess && secondGuess) {
-            if (firstGuess === secondGuess) {
-                setTimeout(match, delay);
+    if (flippedCards.length === 2) {
+        lockBoard = true; // 보드 잠금
+        setTimeout(() => {
+            checkMatch(flippedCards);
+            flippedCards = [];
+            if (document.querySelectorAll('.matched').length === cardData.length) {
+                endGame(); // 게임 종료 시 기록 표시
             }
-            setTimeout(resetGuesses, delay);
-        }
-        previousTarget = clicked;
+            lockBoard = false; // 보드 잠금 해제
+        }, 500); // 카드 뒤집기 지연 시간
     }
-});
+}
 
-const restartButton = document.getElementById('restartButton');
-restartButton.addEventListener('click', () => {
-    memoryGame.innerHTML = '';
-    createBoard();
-});
+function unflipCard(card) {
+    card.classList.remove('flipped');
+}
 
-createBoard();
+function checkMatch(cards) {
+    if (cards[0].dataset.name === cards[1].dataset.name) {
+        cards.forEach(card => card.classList.add('matched'));
+    } else {
+        cards.forEach(card => setTimeout(() => unflipCard(card), 500)); // 카드가 다시 뒤집히는 시간
+    }
+}
+
+function createCard(data) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+    card.dataset.name = data[0];
+    const img = document.createElement('img');
+    img.src = data[1];
+    img.alt = data[0];
+    const back = document.createElement('div');
+    back.classList.add('back');
+    back.textContent = '?';
+    card.appendChild(img);
+    card.appendChild(back);
+    card.addEventListener('click', () => flipCard(card));
+    return card;
+}
+
+function buildGameBoard(data) {
+    const board = document.getElementById('gameBoard');
+    board.innerHTML = ''; // 게임 보드 초기화
+    data.sort(() => Math.random() - 0.5);
+    data.forEach(item => {
+        board.appendChild(createCard(item));
+    });
+}

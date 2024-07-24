@@ -1,16 +1,18 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Memory Matching Game</title>
+    <title>Card Matching Game</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="game-container">
-      <div class="memory-game" id="memoryGame"></div>
-      <button id="restartButton">Restart</button>
+    <div class="game-controls">
+      <button id="startButton">게임 시작</button>
+      <div id="timer">Time: 00:00</div>
+      <div id="record" class="hidden"></div>
     </div>
+    <div id="gameBoard" class="game-board"></div>
     <script src="script.js"></script>
   </body>
 </html>
