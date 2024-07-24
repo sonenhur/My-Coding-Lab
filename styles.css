@@ -11,12 +11,18 @@ body {
 }
 
 .game-controls {
+  text-align: center; /* 가운데 정렬 */
   margin-bottom: 20px;
+}
+
+.game-title {
+  font-size: 24px; /* 글자 크기 조정 */
+  margin-bottom: 10px; /* 제목과 버튼 사이의 간격 조정 */
 }
 
 #startButton {
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 18px; /* 버튼 글자 크기 조정 */
   cursor: pointer;
 }
 
@@ -99,12 +105,16 @@ body {
 }
 
 @media (max-width: 480px) {
+  .game-title {
+    font-size: 20px; /* 작은 화면에서 제목 글자 크기 조정 */
+  }
+
   #startButton {
-    font-size: 14px;
+    font-size: 16px; /* 작은 화면에서 버튼 글자 크기 조정 */
   }
 
   #timer,
   #record {
-    font-size: 16px;
+    font-size: 16px; /* 작은 화면에서 타이머와 기록 글자 크기 조정 */
   }
 }
