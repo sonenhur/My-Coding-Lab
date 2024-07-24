@@ -49,10 +49,10 @@ let timerInterval;
 document.getElementById('startButton').addEventListener('click', startGame);
 
 function adjustCardSize() {
-    const cardSize = Math.min(window.innerWidth / 6, 80); // 화면 너비에 따라 카드 크기 조정, 더 작게 설정
+    const cardSize = Math.min(window.innerWidth / 6, 80);
     document.querySelectorAll('.card').forEach(card => {
         card.style.width = `${cardSize}px`;
-        card.style.paddingBottom = `${cardSize}px`; // 비율 유지
+        card.style.paddingBottom = `${cardSize}px`;
     });
 }
 
@@ -62,21 +62,17 @@ document.addEventListener('DOMContentLoaded', adjustCardSize);
 function startGame() {
     document.getElementById('record').classList.add('hidden');
     document.getElementById('startButton').disabled = true;
-    startTime = new Date();
-    timerInterval = setInterval(updateTimer, 1000);
     buildGameBoard(cardData);
-    // 카드를 5초 동안 보여주기 위한 함수 호출
     showCardsForFiveSeconds();
 }
 
 function showCardsForFiveSeconds() {
     const cards = document.querySelectorAll('.card');
-    cards.forEach(card => card.classList.add('flipped')); // 카드 보이기
-
-    countdownTimeout = setTimeout(() => {
-        cards.forEach(card => card.classList.remove('flipped')); // 카드 숨기기
-        startTimer(); // 타이머 시작
-    }, 5000); // 5초 후에 카드 숨기기
+    cards.forEach(card => card.classList.add('flipped'));
+    setTimeout(() => {
+        cards.forEach(card => card.classList.remove('flipped'));
+        startTimer();
+    }, 5000);
 }
 
 function startTimer() {
@@ -106,15 +102,15 @@ function flipCard(card) {
     flippedCards.push(card);
 
     if (flippedCards.length === 2) {
-        lockBoard = true; // 보드 잠금
+        lockBoard = true;
         setTimeout(() => {
             checkMatch(flippedCards);
             flippedCards = [];
             if (document.querySelectorAll('.matched').length === cardData.length) {
-                endGame(); // 게임 종료 시 기록 표시
+                endGame();
             }
-            lockBoard = false; // 보드 잠금 해제
-        }, 300); // 카드 뒤집기 지연 시간
+            lockBoard = false;
+        }, 300);
     }
 }
 
@@ -126,7 +122,7 @@ function checkMatch(cards) {
     if (cards[0].dataset.name === cards[1].dataset.name) {
         cards.forEach(card => card.classList.add('matched'));
     } else {
-        cards.forEach(card => setTimeout(() => unflipCard(card), 300)); // 카드가 다시 뒤집히는 시간
+        cards.forEach(card => setTimeout(() => unflipCard(card), 300));
     }
 }
 
@@ -148,7 +144,7 @@ function createCard(data) {
 
 function buildGameBoard(data) {
     const board = document.getElementById('gameBoard');
-    board.innerHTML = ''; // 게임 보드 초기화
+    board.innerHTML = '';
     data.sort(() => Math.random() - 0.5);
     data.forEach(item => {
         board.appendChild(createCard(item));
