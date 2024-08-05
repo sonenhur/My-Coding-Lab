@@ -3,26 +3,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>Select Your Character</title>
+    <title>Character Selection</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
   </head>
   <body>
-    <h1>Select Your Character</h1>
-    <form action="{{ url_for('select_character') }}" method="post">
-      {% for character in characters %}
-      <div>
-        <input
-          type="radio"
-          id="{{ character.name }}"
-          name="character"
-          value="{{ character.name }}"
-        />
-        <label for="{{ character.name }}"
-          >{{ character.name }} - HP: {{ character.health }}, Attack: {{
-          character.attack }}, Defense: {{ character.defense }}</label
-        >
-      </div>
-      {% endfor %}
-      <button type="submit">Start Game</button>
-    </form>
+    <div class="container">
+      <h1>Select Your Character</h1>
+      <form action="{{ url_for('select_character') }}" method="post">
+        <div class="character-option">
+          <input
+            type="radio"
+            id="warrior"
+            name="character"
+            value="Warrior"
+            required
+          />
+          <label for="warrior">Warrior</label>
+        </div>
+        <div class="character-option">
+          <input
+            type="radio"
+            id="mage"
+            name="character"
+            value="Mage"
+            required
+          />
+          <label for="mage">Mage</label>
+        </div>
+        <div class="character-option">
+          <input
+            type="radio"
+            id="rogue"
+            name="character"
+            value="Rogue"
+            required
+          />
+          <label for="rogue">Rogue</label>
+        </div>
+        <button type="submit">Start Game</button>
+      </form>
+    </div>
   </body>
 </html>

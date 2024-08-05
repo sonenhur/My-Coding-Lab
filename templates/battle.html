@@ -4,29 +4,42 @@
   <head>
     <meta charset="UTF-8" />
     <title>Battle</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
   </head>
   <body>
-    <h1>{{ player.name }} vs {{ enemy.name }}</h1>
-    <p>
-      {{ player.name }} - Level: {{ player.level }}, HP: {{ player.health }}/{{
-      player.max_health }}, Attack: {{ player.attack }}, Defense: {{
-      player.defense }}
-    </p>
-    <p>
-      {{ enemy.name }} - HP: {{ enemy.health }}/{{ enemy.max_health }}, Attack:
-      {{ enemy.attack }}, Defense: {{ enemy.defense }}
-    </p>
-
-    {% if message %}
-    <p>{{ message }}</p>
-    {% endif %}
-
-    <form action="{{ url_for('action') }}" method="post">
-      <button type="submit" name="action" value="attack">Attack</button>
-      <button type="submit" name="action" value="defend">Defend</button>
-      <button type="submit" name="action" value="run">Run</button>
-      <button type="submit" name="action" value="item">Use Item</button>
-      <input type="text" name="item_name" placeholder="Item name" />
-    </form>
+    <div class="container">
+      <div class="stats">
+        <h1>Battle</h1>
+        <div class="character-stats">
+          <h2>{{ player.name }}</h2>
+          <p>Level: {{ player.level }}</p>
+          <p>Health: {{ player.health }}/{{ player.max_health }}</p>
+          <p>Attack: {{ player.attack }}</p>
+          <p>Defense: {{ player.defense }}</p>
+        </div>
+        <div class="enemy-stats">
+          <h2>{{ enemy.name }}</h2>
+          <p>Health: {{ enemy.health }}/{{ enemy.max_health }}</p>
+          <p>Attack: {{ enemy.attack }}</p>
+          <p>Defense: {{ enemy.defense }}</p>
+        </div>
+      </div>
+      <div class="battle-info">
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <form action="{{ url_for('action') }}" method="post">
+          <button type="submit" name="action" value="attack">Attack</button>
+          <button type="submit" name="action" value="defend">Defend</button>
+          <button type="submit" name="action" value="run">Run</button>
+          <button type="submit" name="action" value="item">Use Item</button>
+          <input type="text" name="item_name" placeholder="Item name" />
+        </form>
+      </div>
+    </div>
   </body>
 </html>

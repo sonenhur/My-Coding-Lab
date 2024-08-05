@@ -1,25 +1,75 @@
+/* static/styles.css */
 body {
   font-family: Arial, sans-serif;
-  text-align: center;
-  margin-top: 50px;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  width: 50%; /* Ensure consistent width */
+  margin: 0 auto; /* Center align the container */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
+  text-align: center;
   color: #333;
 }
 
-p {
-  font-size: 1.2em;
+.stats,
+.actions,
+.battle-info {
+  margin-bottom: 20px;
 }
 
-button {
-  margin: 5px;
+.stats h1,
+.stats h2 {
+  margin: 0;
+  padding-bottom: 10px;
+}
+
+.character-stats,
+.enemy-stats {
+  margin-bottom: 20px;
+}
+
+.character-stats {
+  border-bottom: 2px solid #ccc;
+  padding-bottom: 10px;
+}
+
+button,
+a {
+  display: inline-block;
+  margin-right: 10px;
   padding: 10px 20px;
-  font-size: 1em;
+  text-decoration: none;
+  color: white;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-input {
-  margin: 5px;
+button:hover,
+a:hover {
+  background-color: #0056b3;
+}
+
+input[type="text"] {
   padding: 10px;
-  font-size: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.character-option {
+  margin-bottom: 10px;
+}
+
+label {
+  margin-left: 10px;
 }

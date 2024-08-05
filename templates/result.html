@@ -4,14 +4,21 @@
   <head>
     <meta charset="UTF-8" />
     <title>Game Result</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
   </head>
   <body>
-    <h1>{{ message }}</h1>
-    {% if result == 'win' %}
-    <a href="{{ url_for('index') }}">Continue</a>
-    {% else %}
-    <h2>Game Over</h2>
-    <a href="{{ url_for('reset') }}">Start New Game</a>
-    {% endif %}
+    <div class="container">
+      <h1>{{ message }}</h1>
+      {% if result == 'win' %}
+      <a href="{{ url_for('index') }}">Continue</a>
+      {% else %}
+      <h2>Game Over</h2>
+      <a href="{{ url_for('reset') }}">Start New Game</a>
+      {% endif %}
+    </div>
   </body>
 </html>
