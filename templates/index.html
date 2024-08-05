@@ -1,9 +1,9 @@
 <!-- templates/index.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>RPG Game</title>
+    <title>RPG 게임</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -13,16 +13,16 @@
   <body>
     <div class="container">
       <div class="stats">
-        <h1>Welcome, {{ player.name }}</h1>
-        <p>Level: {{ player.level }}</p>
-        <p>Health: {{ player.health }} / {{ player.max_health }}</p>
-        <p>Attack: {{ player.attack }}</p>
-        <p>Defense: {{ player.defense }}</p>
+        <h1>환영합니다, {{ player.name }}</h1>
+        <p>레벨: {{ player.level }}</p>
+        <p>체력: {{ player.health }} / {{ player.max_health }}</p>
+        <p>공격력: {{ player.attack }}</p>
+        <p>방어력: {{ player.defense }}</p>
       </div>
       <div class="actions">
-        <a href="{{ url_for('battle_page') }}">Start Battle</a>
-        <a href="{{ url_for('rest') }}">Rest</a>
-        <a href="{{ url_for('reset') }}">Start New Game</a>
+        <a href="{{ url_for('battle_page') }}">전투 시작</a>
+        <a href="{{ url_for('rest') }}">휴식</a>
+        <a href="{{ url_for('reset') }}">새 게임 시작</a>
       </div>
     </div>
   </body>

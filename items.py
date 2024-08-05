@@ -8,7 +8,7 @@ class Item:
             target.health += 20
             if target.health > target.max_health:
                 target.health = target.max_health
-            print(f"{target.name} healed for 20 HP.")
+            print(f"{target.name}가 20 HP를 회복했습니다.")
         elif self.effect == "buff":
             target.attack += 5
-            print(f"{target.name}'s attack increased by 5.")
+            print(f"{target.name}의 공격력이 5 증가했습니다.")

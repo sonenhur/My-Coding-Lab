@@ -36,7 +36,7 @@ class Character:
         self.attack += 2
         self.defense += 1
         self.experience = 0
-        print(f"{self.name} leveled up! Level: {self.level}")
+        print(f"{self.name}가 레벨업했습니다! 레벨: {self.level}")
 
     def to_dict(self):
         return {
@@ -62,4 +62,4 @@ class Character:
         )
 
     def __str__(self):
-        return f"{self.name} - Level: {self.level}, HP: {self.health}/{self.max_health}, Attack: {self.attack}, Defense: {self.defense}"
+        return f"{self.name} - 레벨: {self.level}, HP: {self.health}/{self.max_health}, 공격력: {self.attack}, 방어력: {self.defense}"

@@ -1,9 +1,9 @@
 <!-- templates/character_selection.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>Character Selection</title>
+    <title>캐릭터 선택</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -12,39 +12,21 @@
   </head>
   <body>
     <div class="container">
-      <h1>Select Your Character</h1>
+      <h1>캐릭터 선택</h1>
       <form action="{{ url_for('select_character') }}" method="post">
+        {% for character in characters %}
         <div class="character-option">
           <input
             type="radio"
-            id="warrior"
+            id="{{ character.name }}"
             name="character"
-            value="Warrior"
+            value="{{ character.name }}"
             required
           />
-          <label for="warrior">Warrior</label>
+          <label for="{{ character.name }}">{{ character.name }}</label>
         </div>
-        <div class="character-option">
-          <input
-            type="radio"
-            id="mage"
-            name="character"
-            value="Mage"
-            required
-          />
-          <label for="mage">Mage</label>
-        </div>
-        <div class="character-option">
-          <input
-            type="radio"
-            id="rogue"
-            name="character"
-            value="Rogue"
-            required
-          />
-          <label for="rogue">Rogue</label>
-        </div>
-        <button type="submit">Start Game</button>
+        {% endfor %}
+        <button type="submit">게임 시작</button>
       </form>
     </div>
   </body>

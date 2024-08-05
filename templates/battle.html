@@ -1,9 +1,9 @@
 <!-- templates/battle.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>Battle</title>
+    <title>전투</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -13,19 +13,19 @@
   <body>
     <div class="container">
       <div class="stats">
-        <h1>Battle</h1>
+        <h1>전투</h1>
         <div class="character-stats">
           <h2>{{ player.name }}</h2>
-          <p>Level: {{ player.level }}</p>
-          <p>Health: {{ player.health }}/{{ player.max_health }}</p>
-          <p>Attack: {{ player.attack }}</p>
-          <p>Defense: {{ player.defense }}</p>
+          <p>레벨: {{ player.level }}</p>
+          <p>체력: {{ player.health }}/{{ player.max_health }}</p>
+          <p>공격력: {{ player.attack }}</p>
+          <p>방어력: {{ player.defense }}</p>
         </div>
         <div class="enemy-stats">
           <h2>{{ enemy.name }}</h2>
-          <p>Health: {{ enemy.health }}/{{ enemy.max_health }}</p>
-          <p>Attack: {{ enemy.attack }}</p>
-          <p>Defense: {{ enemy.defense }}</p>
+          <p>체력: {{ enemy.health }}/{{ enemy.max_health }}</p>
+          <p>공격력: {{ enemy.attack }}</p>
+          <p>방어력: {{ enemy.defense }}</p>
         </div>
       </div>
       <div class="battle-info">
@@ -33,11 +33,11 @@
         <p>{{ message }}</p>
         {% endif %}
         <form action="{{ url_for('action') }}" method="post">
-          <button type="submit" name="action" value="attack">Attack</button>
-          <button type="submit" name="action" value="defend">Defend</button>
-          <button type="submit" name="action" value="run">Run</button>
-          <button type="submit" name="action" value="item">Use Item</button>
-          <input type="text" name="item_name" placeholder="Item name" />
+          <button type="submit" name="action" value="attack">공격</button>
+          <button type="submit" name="action" value="defend">방어</button>
+          <button type="submit" name="action" value="run">도망</button>
+          <button type="submit" name="action" value="item">아이템 사용</button>
+          <input type="text" name="item_name" placeholder="아이템 이름" />
         </form>
       </div>
     </div>

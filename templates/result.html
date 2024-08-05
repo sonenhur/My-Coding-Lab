@@ -1,9 +1,9 @@
 <!-- templates/result.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
-    <title>Game Result</title>
+    <title>게임 결과</title>
     <link
       rel="stylesheet"
       type="text/css"
@@ -14,10 +14,10 @@
     <div class="container">
       <h1>{{ message }}</h1>
       {% if result == 'win' %}
-      <a href="{{ url_for('index') }}">Continue</a>
+      <a href="{{ url_for('index') }}">계속하기</a>
       {% else %}
-      <h2>Game Over</h2>
-      <a href="{{ url_for('reset') }}">Start New Game</a>
+      <h2>게임 오버</h2>
+      <a href="{{ url_for('reset') }}">새 게임 시작</a>
       {% endif %}
     </div>
   </body>
