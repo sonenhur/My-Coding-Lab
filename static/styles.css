@@ -1,117 +1,25 @@
 body {
-  font-family: "Roboto", sans-serif;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 50px;
 }
 
-#intro,
-#game,
-#game-over,
-#victory {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-}
-
-#container {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
-}
-
-#status,
-#log {
-  flex: 1;
-  margin: 10px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background-color: #f9f9f9;
-}
-
-#status {
-  max-width: 30%;
-}
-
-#log {
-  max-width: 65%;
-}
-
-#game-controls {
-  padding: 20px;
-  border-top: 1px solid #ddd;
-  background-color: #eeeeee;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: row;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
-
-button {
-  padding: 10px 15px;
-  font-size: 16px;
-  margin: 5px;
-  border: none;
-  background-color: #a9a9a9;
-  color: white;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #808080;
-}
-
-#result {
-  font-weight: bold;
-  color: green;
-  margin-top: 10px;
-}
-
-#playerStatus,
-#monsterStatus {
-  margin-bottom: 20px;
-}
-
-#battleLog {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-h1,
-h2 {
-  margin: 0;
+h1 {
   color: #333;
 }
 
-input[type="text"] {
-  padding: 10px;
-  font-size: 16px;
-  margin: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+p {
+  font-size: 1.2em;
 }
 
-@media (max-width: 600px) {
-  #container {
-    flex-direction: column;
-  }
+button {
+  margin: 5px;
+  padding: 10px 20px;
+  font-size: 1em;
+}
 
-  #status,
-  #log {
-    width: 100%;
-    border: none;
-  }
-
-  #status {
-    border-bottom: 1px solid #ddd;
-  }
+input {
+  margin: 5px;
+  padding: 10px;
+  font-size: 1em;
 }

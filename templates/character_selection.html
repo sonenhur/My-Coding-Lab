@@ -1,0 +1,28 @@
+<!-- templates/character_selection.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Select Your Character</title>
+  </head>
+  <body>
+    <h1>Select Your Character</h1>
+    <form action="{{ url_for('select_character') }}" method="post">
+      {% for character in characters %}
+      <div>
+        <input
+          type="radio"
+          id="{{ character.name }}"
+          name="character"
+          value="{{ character.name }}"
+        />
+        <label for="{{ character.name }}"
+          >{{ character.name }} - HP: {{ character.health }}, Attack: {{
+          character.attack }}, Defense: {{ character.defense }}</label
+        >
+      </div>
+      {% endfor %}
+      <button type="submit">Start Game</button>
+    </form>
+  </body>
+</html>

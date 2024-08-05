@@ -1,0 +1,32 @@
+<!-- templates/battle.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Battle</title>
+  </head>
+  <body>
+    <h1>{{ player.name }} vs {{ enemy.name }}</h1>
+    <p>
+      {{ player.name }} - Level: {{ player.level }}, HP: {{ player.health }}/{{
+      player.max_health }}, Attack: {{ player.attack }}, Defense: {{
+      player.defense }}
+    </p>
+    <p>
+      {{ enemy.name }} - HP: {{ enemy.health }}/{{ enemy.max_health }}, Attack:
+      {{ enemy.attack }}, Defense: {{ enemy.defense }}
+    </p>
+
+    {% if message %}
+    <p>{{ message }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('action') }}" method="post">
+      <button type="submit" name="action" value="attack">Attack</button>
+      <button type="submit" name="action" value="defend">Defend</button>
+      <button type="submit" name="action" value="run">Run</button>
+      <button type="submit" name="action" value="item">Use Item</button>
+      <input type="text" name="item_name" placeholder="Item name" />
+    </form>
+  </body>
+</html>

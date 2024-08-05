@@ -1,0 +1,17 @@
+<!-- templates/result.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Game Result</title>
+  </head>
+  <body>
+    <h1>{{ message }}</h1>
+    {% if result == 'win' %}
+    <a href="{{ url_for('index') }}">Continue</a>
+    {% else %}
+    <h2>Game Over</h2>
+    <a href="{{ url_for('reset') }}">Start New Game</a>
+    {% endif %}
+  </body>
+</html>

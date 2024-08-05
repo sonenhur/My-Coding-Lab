@@ -1,0 +1,19 @@
+<!-- templates/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>RPG Game</title>
+  </head>
+  <body>
+    <h1>Welcome, {{ player.name }}</h1>
+    <p>Level: {{ player.level }}</p>
+    <p>Health: {{ player.health }} / {{ player.max_health }}</p>
+    <p>Attack: {{ player.attack }}</p>
+    <p>Defense: {{ player.defense }}</p>
+    <a href="{{ url_for('battle_page') }}">Start Battle</a>
+    <a href="{{ url_for('rest') }}">Rest</a>
+    <a href="{{ url_for('reset') }}">Start New Game</a>
+    <!-- Add this line -->
+  </body>
+</html>
