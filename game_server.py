@@ -1,6 +1,6 @@
 import random
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -108,12 +108,12 @@ players = {}
 
 @app.route("/")
 def index():
-    return app.send_static_file("index.html")
+    return send_from_directory("static", "index.html")
 
 
 @app.route("/battle-history")
 def battle_history():
-    return app.send_static_file("battle_history.html")
+    return send_from_directory("static", "battle_history.html")
 
 
 @app.route("/start", methods=["POST"])

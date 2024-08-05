@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Text RPG Game</title>
     <link rel="stylesheet" href="static/styles.css" />
-    <!-- CSS 파일 경로 -->
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
       rel="stylesheet"
@@ -28,7 +27,6 @@
       <button onclick="attack()">공격</button>
       <button onclick="useItem()">힐링 포션 사용</button>
       <button onclick="viewBattleHistory()">전투 기록 보기</button>
-      <!-- 새로운 버튼 추가 -->
     </div>
     <div id="result"></div>
 
@@ -124,7 +122,7 @@
           "previousBattles",
           JSON.stringify(previousBattles)
         );
-        window.location.href = "battle_history.html";
+        window.location.href = "/battle-history";
       }
     </script>
   </body>
