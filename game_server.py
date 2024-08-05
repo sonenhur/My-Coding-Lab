@@ -1,6 +1,7 @@
 import random
+from datetime import datetime
 
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -16,6 +17,7 @@ class Player:
         self.level = 1
         self.exp = 0
         self.inventory = {"힐링 포션": 3}
+        self.defending = False  # 방어 상태 추가
 
     def level_up(self):
         self.level += 1
@@ -32,6 +34,12 @@ class Player:
                     del self.inventory[item]
                 return True
         return False
+
+    def start_defense(self):
+        self.defending = True
+
+    def stop_defense(self):
+        self.defending = False
 
     def to_dict(self):
         return {
@@ -53,9 +61,13 @@ class Monster:
         self.exp = exp
         self.defense = defense
 
-    def perform_special_attack(self, player):
-        if self.special_attack:
-            self.special_attack(player)
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "hp": self.hp,
+            "attack": self.attack,
+            "defense": self.defense,
+        }
 
 
 def get_monster(player_level):
@@ -102,18 +114,19 @@ def get_monster(player_level):
     return random.choice(available_monsters)
 
 
-# In-memory player storage
+# In-memory storage for game state and battle history
 players = {}
+battle_history = []
 
 
 @app.route("/")
 def index():
-    return send_from_directory("static", "index.html")
+    return app.send_static_file("index.html")
 
 
 @app.route("/battle-history")
-def battle_history():
-    return send_from_directory("static", "battle_history.html")
+def battle_history_page():
+    return app.send_static_file("battle_history.html")
 
 
 @app.route("/start", methods=["POST"])
@@ -121,44 +134,43 @@ def start_game():
     data = request.json
     player_name = data["name"]
     player = Player(player_name)
-    players[player_name] = player
-    return jsonify(player.to_dict())
+    monster = get_monster(player.level)
+    players[player_name] = {"player": player, "monster": monster}
+    return jsonify({"player": player.to_dict(), "monster": monster.to_dict()})
 
 
 @app.route("/attack", methods=["POST"])
 def attack():
     data = request.json
     player_name = data["name"]
-    player = players.get(player_name)
-    if not player:
+    game_state = players.get(player_name)
+    if not game_state:
         return jsonify({"status": "Error", "message": "게임을 시작해주세요."})
 
-    monster = get_monster(player.level)
+    player = game_state["player"]
+    monster = game_state["monster"]
     log_messages = []
 
-    while player.hp > 0 and monster.hp > 0:
-        # Player attack
-        damage_to_monster = max(player.attack - monster.defense, 0)
-        monster.hp -= damage_to_monster
-        log_messages.append(
-            f"{player.name}(이)가 {monster.name}(을)를 공격했습니다. {monster.name}의 HP: {monster.hp}"
-        )
+    # Player attacks monster
+    damage_to_monster = max(player.attack - monster.defense, 0)
+    monster.hp -= damage_to_monster
+    log_messages.append(
+        f"{player.name}(이)가 {monster.name}(을)를 공격했습니다. {monster.name}의 HP: {monster.hp}"
+    )
 
-        if monster.hp <= 0:
-            player.exp += monster.exp
-            if player.exp >= 10 * player.level:
-                player.level_up()
-            return jsonify(
-                {
-                    "status": "Victory",
-                    "message": "승리했습니다!",
-                    "player": player.to_dict(),
-                    "log": log_messages,
-                }
-            )
-
-        # Monster attack
-        damage_to_player = max(monster.attack - player.defense, 0)
+    if monster.hp <= 0:
+        player.exp += monster.exp
+        if player.exp >= 10 * player.level:
+            player.level_up()
+        monster = get_monster(player.level)  # Create a new monster
+        players[player_name]["monster"] = monster  # Update game state with new monster
+        log_messages.append(f"{monster.name}이(가) 새로 등장했습니다!")
+        result_status = "Victory"
+        result_message = "승리했습니다! 새로운 몬스터가 등장했습니다."
+    else:
+        # Monster attacks player
+        effective_defense = player.defense * 1.5 if player.defending else player.defense
+        damage_to_player = max(monster.attack - effective_defense, 0)
         player.hp -= damage_to_player
         log_messages.append(
             f"{monster.name}(이)가 {player.name}(을)를 공격했습니다. {player.name}의 HP: {player.hp}"
@@ -166,20 +178,52 @@ def attack():
 
         if player.hp <= 0:
             del players[player_name]
-            return jsonify(
-                {
-                    "status": "Game Over",
-                    "message": "패배했습니다!",
-                    "player": player.to_dict(),
-                    "log": log_messages,
-                }
-            )
+            result_status = "Game Over"
+            result_message = "패배했습니다!"
+        else:
+            # Reset defending status
+            player.stop_defense()
+            result_status = "In Progress"
+            result_message = "전투 중입니다."
+
+    battle_history.append(
+        {
+            "player": player.to_dict(),
+            "monster": monster.to_dict(),
+            "log": log_messages,
+            "status": result_status,
+            "message": result_message,
+            "timestamp": datetime.now().isoformat(),
+        }
+    )
+
     return jsonify(
         {
-            "status": "In Progress",
-            "message": "전투 중입니다.",
+            "status": result_status,
+            "message": result_message,
             "player": player.to_dict(),
+            "monster": monster.to_dict(),
             "log": log_messages,
+        }
+    )
+
+
+@app.route("/defend", methods=["POST"])
+def defend():
+    data = request.json
+    player_name = data["name"]
+    game_state = players.get(player_name)
+    if not game_state:
+        return jsonify({"status": "Error", "message": "게임을 시작해주세요."})
+
+    player = game_state["player"]
+    player.start_defense()
+    return jsonify(
+        {
+            "status": "Defending",
+            "message": "방어 상태로 전환되었습니다.",
+            "player": player.to_dict(),
+            "monster": game_state["monster"].to_dict(),
         }
     )
 
@@ -188,16 +232,28 @@ def attack():
 def use_item():
     data = request.json
     player_name = data["name"]
-    player = players.get(player_name)
-    if not player:
+    game_state = players.get(player_name)
+    if not game_state:
         return jsonify({"status": "Error", "message": "게임을 시작해주세요."})
 
+    player = game_state["player"]
     if player.use_item("힐링 포션"):
-        return jsonify({"status": "Item Used", "player": player.to_dict()})
+        return jsonify(
+            {
+                "status": "Item Used",
+                "player": player.to_dict(),
+                "monster": game_state["monster"].to_dict(),
+            }
+        )
     else:
         return jsonify(
             {"status": "Item Not Found", "message": "아이템을 찾을 수 없습니다."}
         )
+
+
+@app.route("/get-battle-history", methods=["GET"])
+def get_battle_history():
+    return jsonify(battle_history)
 
 
 if __name__ == "__main__":
