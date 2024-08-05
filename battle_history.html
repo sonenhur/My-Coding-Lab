@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>전투 기록</title>
+    <link rel="stylesheet" href="static/styles.css" />
+    <!-- CSS 파일 경로 -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="history-container">
+      <h1>이전 전투 기록</h1>
+      <div id="battleHistory"></div>
+      <button onclick="goBack()">돌아가기</button>
+    </div>
+
+    <script>
+      function goBack() {
+        window.location.href = "index.html"; // 메인 페이지로 돌아가기
+      }
+
+      function loadBattleHistory() {
+        const history =
+          JSON.parse(localStorage.getItem("previousBattles")) || [];
+        const historyElement = document.getElementById("battleHistory");
+        historyElement.innerHTML = history.join("<hr>");
+      }
+
+      loadBattleHistory(); // 페이지 로드 시 전투 기록 불러오기
+    </script>
+  </body>
+</html>
