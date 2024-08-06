@@ -12,15 +12,23 @@ def battle(player, enemy, action, item_name=None):
         message = f"{player.name}가 {enemy.name}에게 {damage}의 피해를 입혔습니다."
     elif action == "defend":
         message = f"{player.name}가 방어했습니다."
-    elif action == "item" and item_name:
-        if item_name == "potion":
-            potion = Item("포션", "heal")
-            potion.use(player)
-            message = f"{player.name}가 포션을 사용했습니다."
-        elif item_name == "buff":
-            buff = Item("공격력 증가", "buff")
-            buff.use(player)
-            message = f"{player.name}가 공격력 증가 아이템을 사용했습니다."
+    elif action == "item":
+        if not item_name:
+            message = "아이템 이름을 입력해 주세요."
+        else:
+            item = next(
+                (
+                    item
+                    for item in player.inventory
+                    if item.name.lower() == item_name.lower()
+                ),
+                None,
+            )
+            if item:
+                item.use(player)
+                message = f"{player.name}가 {item_name}을(를) 사용했습니다."
+            else:
+                message = f"아이템 '{item_name}'을(를) 찾을 수 없습니다."
     elif action == "run":
         message = f"{player.name}가 도망쳤습니다!"
         return "run", message, experience_reward, gold_reward

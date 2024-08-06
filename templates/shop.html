@@ -1,3 +1,4 @@
+<!-- templates/shop.html -->
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -12,26 +13,34 @@
   <body>
     <div class="container">
       <h1>상점</h1>
-      <p>골드: {{ player.gold }}</p>
-      {% if message %}
-      <p>{{ message }}</p>
-      {% endif %}
-      <ul>
-        {% for item in items %}
-        <li>
-          {{ item.name }} - 효과: {{ item.effect }} - 가격: {{ item.cost }} 골드
-          <form
-            action="{{ url_for('buy') }}"
-            method="post"
-            style="display: inline"
-          >
-            <input type="hidden" name="item_name" value="{{ item.name }}" />
-            <button type="submit">구매</button>
-          </form>
-        </li>
-        {% endfor %}
-      </ul>
-      <a href="{{ url_for('index') }}">홈으로 돌아가기</a>
+      <div class="player-stats">
+        <h2>{{ player.name }}</h2>
+        <p>골드: {{ player.gold }}</p>
+      </div>
+      <div class="item-list">
+        <h2>아이템 목록</h2>
+        <ul>
+          {% for item in items %}
+          <li>
+            <form action="{{ url_for('buy') }}" method="post">
+              <p>
+                {{ item.name }} - {{ item.effect }} - 가격: {{ item.price }}
+                골드
+              </p>
+              <button type="submit" name="item_name" value="{{ item.name }}">
+                구매
+              </button>
+            </form>
+          </li>
+          {% endfor %}
+        </ul>
+        {% if message %}
+        <p>{{ message }}</p>
+        {% endif %}
+        <form action="{{ url_for('index') }}" method="get">
+          <button type="submit">나가기</button>
+        </form>
+      </div>
     </div>
   </body>
 </html>

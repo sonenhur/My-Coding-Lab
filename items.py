@@ -1,8 +1,8 @@
 class Item:
-    def __init__(self, name, effect, cost):
+    def __init__(self, name, effect, price):
         self.name = name
         self.effect = effect
-        self.cost = cost
+        self.price = price
 
     def use(self, target):
         if self.effect == "heal":
@@ -14,24 +14,36 @@ class Item:
             target.attack += 5
             print(f"{target.name}의 공격력이 5 증가했습니다.")
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "effect": self.effect,
+            "price": self.price,
+        }
+
+    @classmethod
+    def from_dict(cls, data):
+        return cls(name=data["name"], effect=data["effect"], price=data["price"])
+
 
 def get_items():
-    return [
-        Item("포션", "heal", 50),
-        Item("공격력 증가", "buff", 100),
-    ]
+    return [Item("Potion", "heal", 20), Item("Elixir", "buff", 50)]
 
 
-def buy_item(player, item_name):
+def buy_item(character, item_name):
     items = get_items()
-    item = next((item for item in items if item.name == item_name), None)
-
-    if item is None:
-        return False, "아이템이 존재하지 않습니다."
-
-    if player.gold < item.cost:
-        return False, "골드가 부족합니다."
-
-    player.gold -= item.cost
-    item.use(player)
-    return True, f"{item.name}를 구매하고 사용했습니다."
+    item = next(
+        (item for item in items if item.name.lower() == item_name.lower()), None
+    )
+    print(
+        f"구매 시도: 아이템 - {item}, 플레이어 골드 - {character.gold}"
+    )  # 디버깅 추가
+    if item:
+        if character.gold >= item.price:
+            character.gold -= item.price
+            character.inventory.append(item)
+            return True, f"아이템 '{item.name}'을(를) 구매했습니다."
+        else:
+            return False, "골드가 부족합니다."
+    else:
+        return False, f"아이템 '{item_name}'을(를) 찾을 수 없습니다."

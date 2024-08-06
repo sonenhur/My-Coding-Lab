@@ -1,8 +1,10 @@
+import random
+
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from battle import battle
 from character import Character
-from items import buy_item, get_items  # buy_item을 임포트합니다.
+from items import buy_item, get_items
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -25,6 +27,13 @@ ENEMY_OPTIONS = [
     {"name": "하피", "health": 80, "attack": 16, "defense": 9},
     {"name": "슬라임", "health": 40, "attack": 8, "defense": 5},
 ]
+
+
+def get_enemy_for_level(level):
+    # 적의 레벨 범위 설정 (1~5 레벨의 적들 중에서 선택)
+    max_enemy_level = min(level, len(ENEMY_OPTIONS))
+    eligible_enemies = ENEMY_OPTIONS[:max_enemy_level]
+    return random.choice(eligible_enemies)
 
 
 @app.route("/")
@@ -52,8 +61,8 @@ def select_character():
 @app.route("/battle")
 def battle_page():
     player = Character.from_dict(session["player"])
-    enemy_data = ENEMY_OPTIONS[player.level % len(ENEMY_OPTIONS)]
-    enemy = Character(**enemy_data)
+    enemy = get_enemy_for_level(player.level)  # 캐릭터의 레벨에 맞는 적 선택
+    enemy = Character(**enemy)
     session["enemy"] = enemy.to_dict()
     return render_template("battle.html", player=player, enemy=enemy)
 
@@ -143,6 +152,7 @@ def buy():
     item_name = request.form["item_name"]
     success, message = buy_item(player, item_name)  # buy_item 호출
     session["player"] = player.to_dict()
+    items = get_items()
     return render_template(
         "shop.html", items=get_items(), player=player, message=message
     )
