@@ -5,12 +5,12 @@ class Item:
         self.price = price
 
     def use(self, target):
-        if self.effect == "heal":
+        if self.effect == "체력 회복":
             target.health += 20
             if target.health > target.max_health:
                 target.health = target.max_health
             print(f"{target.name}가 20 HP를 회복했습니다.")
-        elif self.effect == "buff":
+        elif self.effect == "공격력 증가":
             target.attack += 5
             print(f"{target.name}의 공격력이 5 증가했습니다.")
 
@@ -27,7 +27,7 @@ class Item:
 
 
 def get_items():
-    return [Item("Potion", "heal", 20), Item("Elixir", "buff", 50)]
+    return [Item("Potion", "체력 회복", 20), Item("Elixir", "공격력 증가", 50)]
 
 
 def buy_item(character, item_name):
