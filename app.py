@@ -1,8 +1,8 @@
-###app.py###
 from flask import Flask, redirect, render_template, request, session, url_for
 
 from battle import battle
 from character import Character
+from items import buy_item, get_items  # buy_item을 임포트합니다.
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"
@@ -44,6 +44,7 @@ def select_character():
     if character_data is None:
         return "Invalid character selected", 400
     player = Character(**character_data)
+    player.gold = 100  # 초기 골드를 설정합니다.
     session["player"] = player.to_dict()
     return redirect(url_for("index"))
 
@@ -64,7 +65,9 @@ def action():
     action = request.form["action"]
     item_name = request.form.get("item_name", None)
 
-    status, message = battle(player, enemy, action, item_name)
+    status, message, experience_reward, gold_reward = battle(
+        player, enemy, action, item_name
+    )
 
     session["player"] = player.to_dict()
     session["enemy"] = enemy.to_dict()
@@ -72,9 +75,23 @@ def action():
     if status == "run":
         return redirect(url_for("index"))
     elif status == "lose":
-        return redirect(url_for("result", result="lose"))
+        return redirect(
+            url_for(
+                "result",
+                result="lose",
+                experience_reward=experience_reward,
+                gold_reward=gold_reward,
+            )
+        )
     elif status == "win":
-        return redirect(url_for("result", result="win"))
+        return redirect(
+            url_for(
+                "result",
+                result="win",
+                experience_reward=experience_reward,
+                gold_reward=gold_reward,
+            )
+        )
 
     return render_template("battle.html", player=player, enemy=enemy, message=message)
 
@@ -82,11 +99,21 @@ def action():
 @app.route("/result/<result>")
 def result(result):
     player = Character.from_dict(session["player"])
+    experience_reward = request.args.get("experience_reward", 0, type=int)
+    gold_reward = request.args.get("gold_reward", 0, type=int)
+
     if result == "win":
         message = f"{player.name}가 전투에서 승리하고 레벨업했습니다!"
     else:
         message = f"{player.name}가 패배했습니다."
-    return render_template("result.html", message=message, result=result)
+
+    return render_template(
+        "result.html",
+        message=message,
+        result=result,
+        experience_reward=experience_reward,
+        gold_reward=gold_reward,
+    )
 
 
 @app.route("/rest")
@@ -103,72 +130,23 @@ def reset():
     return redirect(url_for("index"))  # 캐릭터 선택 화면으로 리디렉션합니다
 
 
+@app.route("/shop")
+def shop():
+    player = Character.from_dict(session["player"])
+    items = get_items()
+    return render_template("shop.html", player=player, items=items)
+
+
+@app.route("/buy", methods=["POST"])
+def buy():
+    player = Character.from_dict(session["player"])
+    item_name = request.form["item_name"]
+    success, message = buy_item(player, item_name)  # buy_item 호출
+    session["player"] = player.to_dict()
+    return render_template(
+        "shop.html", items=get_items(), player=player, message=message
+    )
+
+
 if __name__ == "__main__":
     app.run(debug=True)
-
-
-class Character:
-    def __init__(
-        self, name, health, attack, defense, level=1, experience=0, max_health=None
-    ):
-        self.name = name
-        self.health = health
-        self.max_health = max_health if max_health is not None else health
-        self.attack = attack
-        self.defense = defense
-        self.level = level
-        self.experience = experience
-
-    def is_alive(self):
-        return self.health > 0
-
-    def take_damage(self, damage):
-        self.health -= damage
-        if self.health < 0:
-            self.health = 0
-
-    def attack_target(self, target):
-        damage = self.attack - target.defense
-        if damage > 0:
-            target.take_damage(damage)
-        return damage
-
-    def gain_experience(self, exp):
-        self.experience += exp
-        if self.experience >= self.level * 10:
-            self.level_up()
-
-    def level_up(self):
-        self.level += 1
-        self.max_health += 10
-        self.health = self.max_health
-        self.attack += 2
-        self.defense += 1
-        self.experience = 0
-        print(f"{self.name}가 레벨업했습니다! 레벨: {self.level}")
-
-    def to_dict(self):
-        return {
-            "name": self.name,
-            "health": self.health,
-            "max_health": self.max_health,
-            "attack": self.attack,
-            "defense": self.defense,
-            "level": self.level,
-            "experience": self.experience,
-        }
-
-    @classmethod
-    def from_dict(cls, data):
-        return cls(
-            name=data["name"],
-            health=data["health"],
-            attack=data["attack"],
-            defense=data["defense"],
-            level=data["level"],
-            experience=data["experience"],
-            max_health=data["max_health"],
-        )
-
-    def __str__(self):
-        return f"{self.name} - 레벨: {self.level}, HP: {self.health}/{self.max_health}, 공격력: {self.attack}, 방어력: {self.defense}"

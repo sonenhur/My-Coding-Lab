@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>상점</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>상점</h1>
+      <p>골드: {{ player.gold }}</p>
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+      <ul>
+        {% for item in items %}
+        <li>
+          {{ item.name }} - 효과: {{ item.effect }} - 가격: {{ item.cost }} 골드
+          <form
+            action="{{ url_for('buy') }}"
+            method="post"
+            style="display: inline"
+          >
+            <input type="hidden" name="item_name" value="{{ item.name }}" />
+            <button type="submit">구매</button>
+          </form>
+        </li>
+        {% endfor %}
+      </ul>
+      <a href="{{ url_for('index') }}">홈으로 돌아가기</a>
+    </div>
+  </body>
+</html>
