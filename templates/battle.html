@@ -20,6 +20,17 @@
           <p>체력: {{ player.health }}/{{ player.max_health }}</p>
           <p>공격력: {{ player.attack }}</p>
           <p>방어력: {{ player.defense }}</p>
+          <p>골드: {{ player.gold }}</p>
+          <h2>아이템</h2>
+          <ul>
+            {% if player.inventory %} {% for item in player.inventory %}
+            <li>
+              {{ item.name }} - {{ item.effect }} (가격: {{ item.price }})
+            </li>
+            {% endfor %} {% else %}
+            <li>소유한 아이템이 없습니다.</li>
+            {% endif %}
+          </ul>
         </div>
         <div class="enemy-stats">
           <h2>{{ enemy.name }}</h2>

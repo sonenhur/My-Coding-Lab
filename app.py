@@ -74,9 +74,19 @@ def action():
     action = request.form["action"]
     item_name = request.form.get("item_name", None)
 
-    status, message, experience_reward, gold_reward = battle(
-        player, enemy, action, item_name
-    )
+    if action == "item" and item_name:
+        # 아이템 사용 로직
+        item_used, message = use_item(player, item_name)
+        if not item_used:
+            message = "아이템을 사용할 수 없습니다."
+        session["player"] = player.to_dict()
+        session["enemy"] = enemy.to_dict()
+        return render_template(
+            "battle.html", player=player, enemy=enemy, message=message
+        )
+
+    # 전투 진행
+    status, message, experience_reward, gold_reward = battle(player, enemy, action)
 
     session["player"] = player.to_dict()
     session["enemy"] = enemy.to_dict()
@@ -103,6 +113,15 @@ def action():
         )
 
     return render_template("battle.html", player=player, enemy=enemy, message=message)
+
+
+def use_item(character, item_name):
+    item = next((i for i in character.inventory if i.name == item_name), None)
+    if item:
+        item.use(character)
+        character.inventory.remove(item)
+        return True, f"{item.name}을(를) 사용했습니다."
+    return False, "아이템을 찾을 수 없습니다."
 
 
 @app.route("/result/<result>")
@@ -153,9 +172,7 @@ def buy():
     success, message = buy_item(player, item_name)  # buy_item 호출
     session["player"] = player.to_dict()
     items = get_items()
-    return render_template(
-        "shop.html", items=get_items(), player=player, message=message
-    )
+    return render_template("shop.html", items=items, player=player, message=message)
 
 
 if __name__ == "__main__":
