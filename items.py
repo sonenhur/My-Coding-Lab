@@ -4,16 +4,17 @@ class Item:
         self.effect = effect
         self.price = price
 
-
-def use(self, target):
-    if self.effect == "체력 회복":
-        target.health += 20
-        if target.health > target.max_health:
-            target.health = target.max_health
-        print(f"{target.name}가 20 HP를 회복했습니다.")
-    elif self.effect == "공격력 증가":
-        target.attack += 5
-        print(f"{target.name}의 공격력이 5 증가했습니다.")
+    def use(self, target):
+        if self.effect == "heal":
+            # 체력 회복
+            target.health = min(target.health + 20, target.max_health)
+            print(f"{target.name}가 20 HP를 회복했습니다.")
+        elif self.effect == "buff":
+            # 공격력 증가
+            target.attack += 5
+            print(f"{target.name}의 공격력이 5 증가했습니다.")
+        else:
+            print(f"아이템 효과 '{self.effect}'는 지원하지 않습니다.")
 
     def to_dict(self):
         return {
@@ -28,7 +29,7 @@ def use(self, target):
 
 
 def get_items():
-    return [Item("Potion", "체력 회복", 20), Item("Elixir", "공격력 증가", 50)]
+    return [Item("Potion", "heal", 20), Item("Elixir", "buff", 50)]
 
 
 def buy_item(character, item_name):
@@ -36,9 +37,7 @@ def buy_item(character, item_name):
     item = next(
         (item for item in items if item.name.lower() == item_name.lower()), None
     )
-    print(
-        f"구매 시도: 아이템 - {item}, 플레이어 골드 - {character.gold}"
-    )  # 디버깅 추가
+
     if item:
         if character.gold >= item.price:
             character.gold -= item.price

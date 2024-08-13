@@ -7,7 +7,7 @@ from character import Character
 from items import buy_item, get_items
 
 app = Flask(__name__)
-app.secret_key = "your_secret_key"
+app.secret_key = "your_secret_key"  # 비밀 키는 안전한 방법으로 설정하는 것이 좋습니다
 
 CHARACTER_OPTIONS = [
     {"name": "전사", "health": 130, "attack": 16, "defense": 14},
@@ -30,7 +30,7 @@ ENEMY_OPTIONS = [
 
 
 def get_enemy_for_level(level):
-    # 적의 레벨 범위 설정 (1~5 레벨의 적들 중에서 선택)
+    # 적의 레벨 범위 설정
     max_enemy_level = min(level, len(ENEMY_OPTIONS))
     eligible_enemies = ENEMY_OPTIONS[:max_enemy_level]
     return random.choice(eligible_enemies)
@@ -38,20 +38,22 @@ def get_enemy_for_level(level):
 
 @app.route("/")
 def index():
-    if "player" not in session:
+    player_data = session.get("player")
+    if not player_data:
         return render_template("character_selection.html", characters=CHARACTER_OPTIONS)
-    player = Character.from_dict(session["player"])
+    player = Character.from_dict(player_data)
     return render_template("index.html", player=player)
 
 
 @app.route("/select_character", methods=["POST"])
 def select_character():
-    selected_character = request.form["character"]
+    selected_character = request.form.get("character")
     character_data = next(
         (char for char in CHARACTER_OPTIONS if char["name"] == selected_character), None
     )
-    if character_data is None:
+    if not character_data:
         return "Invalid character selected", 400
+
     player = Character(**character_data)
     player.gold = 100  # 초기 골드를 설정합니다.
     session["player"] = player.to_dict()
@@ -60,8 +62,12 @@ def select_character():
 
 @app.route("/battle")
 def battle_page():
-    player = Character.from_dict(session["player"])
-    enemy = get_enemy_for_level(player.level)  # 캐릭터의 레벨에 맞는 적 선택
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
+    enemy = get_enemy_for_level(player.level)
     enemy = Character(**enemy)
     session["enemy"] = enemy.to_dict()
     return render_template("battle.html", player=player, enemy=enemy)
@@ -69,13 +75,18 @@ def battle_page():
 
 @app.route("/action", methods=["POST"])
 def action():
-    player = Character.from_dict(session["player"])
-    enemy = Character.from_dict(session["enemy"])
-    action = request.form["action"]
-    item_name = request.form.get("item_name", None)
+    player_data = session.get("player")
+    enemy_data = session.get("enemy")
+
+    if not player_data or not enemy_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
+    enemy = Character.from_dict(enemy_data)
+    action = request.form.get("action")
+    item_name = request.form.get("item_name")
 
     if action == "item" and item_name:
-        # 아이템 사용 로직
         item_used, message = use_item(player, item_name)
         if not item_used:
             message = "아이템을 사용할 수 없습니다."
@@ -126,7 +137,11 @@ def use_item(character, item_name):
 
 @app.route("/result/<result>")
 def result(result):
-    player = Character.from_dict(session["player"])
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
     experience_reward = request.args.get("experience_reward", 0, type=int)
     gold_reward = request.args.get("gold_reward", 0, type=int)
 
@@ -146,7 +161,11 @@ def result(result):
 
 @app.route("/rest")
 def rest():
-    player = Character.from_dict(session["player"])
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
     player.health = player.max_health
     session["player"] = player.to_dict()
     return redirect(url_for("index"))
@@ -160,15 +179,23 @@ def reset():
 
 @app.route("/shop")
 def shop():
-    player = Character.from_dict(session["player"])
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
     items = get_items()
     return render_template("shop.html", player=player, items=items)
 
 
 @app.route("/buy", methods=["POST"])
 def buy():
-    player = Character.from_dict(session["player"])
-    item_name = request.form["item_name"]
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
+    item_name = request.form.get("item_name")
     success, message = buy_item(player, item_name)  # buy_item 호출
     session["player"] = player.to_dict()
     items = get_items()
