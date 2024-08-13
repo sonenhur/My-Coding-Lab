@@ -11,15 +11,19 @@
   </head>
   <body>
     <div class="container">
-      <h1>{{ message }}</h1>
-      {% if result == 'win' %}
-      <p>획득한 경험치: {{ experience_reward }}</p>
-      <p>획득한 골드: {{ gold_reward }}</p>
-      <a href="{{ url_for('index') }}">계속하기</a>
-      {% else %}
-      <h2>게임 오버</h2>
-      <a href="{{ url_for('reset') }}">새 게임 시작</a>
-      {% endif %}
+      <div class="result">
+        <h1>{{ message }}</h1>
+        {% if result == 'win' %}
+        <div class="result-details">
+          <p>획득한 경험치: {{ experience_reward }}</p>
+          <p>획득한 골드: {{ gold_reward }}</p>
+          <a href="{{ url_for('index') }}" class="action-btn">계속하기</a>
+        </div>
+        {% else %}
+        <h2>게임 오버</h2>
+        <a href="{{ url_for('reset') }}" class="action-btn">새 게임 시작</a>
+        {% endif %}
+      </div>
     </div>
   </body>
 </html>
