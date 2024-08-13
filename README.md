@@ -38,7 +38,7 @@
 3. **필요한 패키지 설치**:
 
    ```bash
-   pip install -r requirements.txt
+   pip install Flask
    ```
 
 ### 실행
