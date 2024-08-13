@@ -1,3 +1,6 @@
+from items import Item  # `items.py`에서 `Item` 클래스를 임포트
+
+
 class Character:
     def __init__(
         self,
@@ -81,9 +84,9 @@ class Character:
         )
 
 
-class Item:
+class CharacterItem:
     def __init__(self, name, effect, price):
-        self.name = name
+        self.name = name.lower()  # 이름을 소문자로 저장
         self.effect = effect
         self.price = price
 
@@ -92,7 +95,7 @@ class Item:
             "heal": self.apply_heal,
             "buff": self.apply_buff,
         }
-        method = effect_methods.get(self.effect)
+        method = effect_methods.get(self.effect.lower())  # 효과를 소문자로 변환
         if method:
             method(target)
         else:
@@ -115,7 +118,11 @@ class Item:
 
     @classmethod
     def from_dict(cls, data):
-        return cls(name=data["name"], effect=data["effect"], price=data["price"])
+        return cls(
+            name=data["name"].lower(),  # 아이템 이름을 소문자로 변환
+            effect=data["effect"],
+            price=data["price"],
+        )
 
 
 def get_items():

@@ -5,16 +5,23 @@ class Item:
         self.price = price
 
     def use(self, target):
-        if self.effect == "heal":
-            # 체력 회복
-            target.health = min(target.health + 20, target.max_health)
-            print(f"{target.name}가 20 HP를 회복했습니다.")
-        elif self.effect == "buff":
-            # 공격력 증가
-            target.attack += 5
-            print(f"{target.name}의 공격력이 5 증가했습니다.")
+        effect_methods = {
+            "heal": self.apply_heal,
+            "buff": self.apply_buff,
+        }
+        method = effect_methods.get(self.effect.lower())  # 효과를 소문자로 변환
+        if method:
+            method(target)
         else:
             print(f"아이템 효과 '{self.effect}'는 지원하지 않습니다.")
+
+    def apply_heal(self, target):
+        target.health = min(target.health + 20, target.max_health)
+        print(f"{target.name}가 20 HP를 회복했습니다.")
+
+    def apply_buff(self, target):
+        target.attack += 5
+        print(f"{target.name}의 공격력이 5 증가했습니다.")
 
     def to_dict(self):
         return {
