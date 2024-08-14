@@ -1,8 +1,9 @@
+# battle.py
+
 from character import Character
-from items import Item
 
 
-def battle(player, enemy, action, item_name=None):
+def battle(player: Character, enemy: Character, action: str, item_name: str = None):
     message = ""
     experience_reward = 0
     gold_reward = 0
@@ -14,24 +15,9 @@ def battle(player, enemy, action, item_name=None):
     elif action == "defend":
         message = f"{player.name}가 방어했습니다."
     elif action == "item":
-        if not item_name:
-            message = "아이템 이름을 입력해 주세요."
-        else:
-            item = next(
-                (
-                    item
-                    for item in player.inventory
-                    if item.name.lower() == item_name.lower()
-                ),
-                None,
-            )
-            if item:
-                item.use(player)  # 아이템 사용
-                player.inventory.remove(item)  # 인벤토리에서 아이템 제거
-                # 상태가 업데이트된 후 확인
-                message = f"{player.name}가 {item_name}을(를) 사용했습니다."
-            else:
-                message = f"아이템 '{item_name}'을(를) 찾을 수 없습니다."
+        item_used, message = use_item(player, item_name)
+        if not item_used:
+            return "continue", message, experience_reward, gold_reward
     elif action == "run":
         message = f"{player.name}가 도망쳤습니다!"
         return "run", message, experience_reward, gold_reward
@@ -51,9 +37,19 @@ def battle(player, enemy, action, item_name=None):
         player.gain_experience(experience_reward)
         player.gold += gold_reward
         message += f" {player.name}가 승리하고 {experience_reward} 경험치와 {gold_reward} 골드를 획득했습니다."
+        player.update_quests()  # 퀘스트 진행 상황 업데이트
         return "win", message, experience_reward, gold_reward
     elif not player.is_alive():
         message += f" {player.name}가 패배했습니다."
         return "lose", message, experience_reward, gold_reward
 
     return "continue", message, experience_reward, gold_reward
+
+
+def use_item(character: Character, item_name: str):
+    item = next((i for i in character.inventory if i.name == item_name), None)
+    if item:
+        item.use(character)
+        character.inventory.remove(item)
+        return True, f"{item.name}을(를) 사용했습니다."
+    return False, "아이템을 찾을 수 없습니다."

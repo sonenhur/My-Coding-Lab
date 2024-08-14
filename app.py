@@ -2,9 +2,10 @@ import random
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from battle import battle
+from battle import battle, use_item  # battle.py의 함수들을 임포트
 from character import Character
 from items import buy_item, get_items
+from quest import Quest  # 퀘스트 클래스 임포트
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # 비밀 키는 안전한 방법으로 설정하는 것이 좋습니다
@@ -56,6 +57,11 @@ def select_character():
 
     player = Character(**character_data)
     player.gold = 100  # 초기 골드를 설정합니다.
+
+    # 퀘스트 예시 추가
+    quest_kill_5_enemies = Quest("적 5마리 처치", "적을 5번 처치하세요.", 5, 100)
+    player.add_quest(quest_kill_5_enemies)
+
     session["player"] = player.to_dict()
     return redirect(url_for("index"))
 
@@ -86,18 +92,9 @@ def action():
     action = request.form.get("action")
     item_name = request.form.get("item_name")
 
-    if action == "item" and item_name:
-        item_used, message = use_item(player, item_name)
-        if not item_used:
-            message = "아이템을 사용할 수 없습니다."
-        session["player"] = player.to_dict()
-        session["enemy"] = enemy.to_dict()
-        return render_template(
-            "battle.html", player=player, enemy=enemy, message=message
-        )
-
-    # 전투 진행
-    status, message, experience_reward, gold_reward = battle(player, enemy, action)
+    status, message, experience_reward, gold_reward = battle(
+        player, enemy, action, item_name
+    )
 
     session["player"] = player.to_dict()
     session["enemy"] = enemy.to_dict()
@@ -146,7 +143,7 @@ def result(result):
     gold_reward = request.args.get("gold_reward", 0, type=int)
 
     if result == "win":
-        message = f"{player.name}가 전투에서 승리하고 레벨업했습니다!"
+        message = f"{player.name}가 전투에서 승리했습니다!"
     else:
         message = f"{player.name}가 패배했습니다."
 
@@ -200,6 +197,29 @@ def buy():
     session["player"] = player.to_dict()
     items = get_items()
     return render_template("shop.html", items=items, player=player, message=message)
+
+
+@app.route("/quests")
+def quests():
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
+    return render_template("quests.html", player=player, quests=player.quests)
+
+
+@app.route("/complete_quest", methods=["POST"])
+def complete_quest():
+    player_data = session.get("player")
+    if not player_data:
+        return redirect(url_for("index"))
+
+    player = Character.from_dict(player_data)
+    quest_name = request.form.get("quest_name")
+    message = player.complete_quest(quest_name)
+    session["player"] = player.to_dict()
+    return redirect(url_for("quests"))
 
 
 if __name__ == "__main__":

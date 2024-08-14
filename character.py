@@ -1,4 +1,5 @@
 from items import Item  # `items.py`에서 `Item` 클래스를 임포트
+from quest import Quest
 
 
 class Character:
@@ -13,6 +14,7 @@ class Character:
         max_health=None,
         gold=0,
         inventory=None,
+        quests=None,
     ):
         self.name = name
         self.health = health
@@ -23,6 +25,7 @@ class Character:
         self.experience = experience
         self.gold = gold
         self.inventory = inventory if inventory is not None else []
+        self.quests = quests if quests is not None else []  # 퀘스트 목록
 
     def is_alive(self):
         return self.health > 0
@@ -62,6 +65,24 @@ class Character:
             "gold": self.gold,
             "inventory": [item.to_dict() for item in self.inventory],
         }
+
+    def add_quest(self, quest):
+        self.quests.append(quest)
+
+    def complete_quest(self, quest_name):
+        for quest in self.quests:
+            if quest.name == quest_name and quest.completed:
+                self.quests.remove(quest)
+                self.gold += quest.reward
+                return (
+                    f"퀘스트 '{quest_name}' 완료! {quest.reward} 골드를 획득했습니다."
+                )
+        return "완료할 수 있는 퀘스트가 없습니다."
+
+    def update_quests(self):
+        for quest in self.quests:
+            if quest.update_progress():
+                print(f"퀘스트 '{quest.name}' 완료!")
 
     @classmethod
     def from_dict(cls, data):

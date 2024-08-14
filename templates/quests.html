@@ -1,0 +1,27 @@
+<!-- templates/quests.html -->
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>퀘스트 목록</title>
+  </head>
+  <body>
+    <h1>{{ player.name }}의 퀘스트 목록</h1>
+    <ul>
+      {% for quest in quests %}
+      <li>
+        <strong>{{ quest.name }}</strong> - {{ quest.description }} (진행상황:
+        {{ quest.progress }}/{{ quest.goal }}) {% if quest.completed %}
+        <form action="{{ url_for('complete_quest') }}" method="post">
+          <input type="hidden" name="quest_name" value="{{ quest.name }}" />
+          <button type="submit">보상 받기</button>
+        </form>
+        {% else %}
+        <span>진행 중...</span>
+        {% endif %}
+      </li>
+      {% endfor %}
+    </ul>
+    <a href="{{ url_for('index') }}">돌아가기</a>
+  </body>
+</html>
