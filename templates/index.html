@@ -8,6 +8,17 @@
       type="text/css"
       href="{{ url_for('static', filename='styles.css') }}"
     />
+    <script>
+      function confirmNewGame(event) {
+        event.preventDefault(); // 링크의 기본 동작을 막습니다.
+        var confirmation = confirm(
+          "정말로 새 게임을 시작하시겠습니까? 현재 진행 중인 게임 데이터는 사라집니다."
+        );
+        if (confirmation) {
+          window.location.href = event.target.href; // 확인 시 링크로 이동합니다.
+        }
+      }
+    </script>
   </head>
   <body>
     <div class="container">
@@ -25,7 +36,12 @@
         <a href="{{ url_for('battle_page') }}" class="action-btn">전투 시작</a>
         <a href="{{ url_for('rest') }}" class="action-btn">휴식</a>
         <a href="{{ url_for('shop') }}" class="action-btn">상점</a>
-        <a href="{{ url_for('reset') }}" class="action-btn">새 게임 시작</a>
+        <a
+          href="{{ url_for('reset') }}"
+          class="action-btn"
+          onclick="confirmNewGame(event)"
+          >새 게임 시작</a
+        >
       </div>
     </div>
   </body>
