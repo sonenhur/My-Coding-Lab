@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>텍스트RPG 「텍알」</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container title-container">
+      <h1>텍스트RPG 「텍알」</h1>
+      <div class="world-intro">
+        <br>
+          오래전부터 세계는 고대의 마법과 위험한 괴물들로 가득했습니다.</br>
+          당신은 전사, 궁수, 마법사 중 하나가 되어, 이 세계를 탐험하게 됩니다.</br>
+          위험이 도사리고 있는 이 세계에서, 당신의 선택이 세계의 운명을 결정할 것입니다.</br>
+      </div>
+      <div class="start-game">
+        <a href="{{ url_for('character_selection') }}" class="start-btn"
+          >게임 시작</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

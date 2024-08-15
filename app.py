@@ -38,12 +38,30 @@ def get_enemy_for_level(level):
     return random.choice(eligible_enemies)
 
 
+# @app.route("/")
+# def index():
+#     player_data = session.get("player")
+#     if not player_data:
+#         return render_template("character_selection.html", characters=CHARACTER_OPTIONS)
+#     return render_template("index.html", player=player_data)  # from_dict 생략 가능
 @app.route("/")
+def title():
+    return render_template("title.html")
+
+
+@app.route("/index")
 def index():
     player_data = session.get("player")
     if not player_data:
-        return render_template("character_selection.html", characters=CHARACTER_OPTIONS)
-    return render_template("index.html", player=player_data)  # from_dict 생략 가능
+        return redirect(url_for("character_selection"))
+
+    player = Character.from_dict(player_data)
+    return render_template("index.html", player=player)
+
+
+@app.route("/character_selection")
+def character_selection():
+    return render_template("character_selection.html", characters=CHARACTER_OPTIONS)
 
 
 @app.route("/select_character", methods=["POST"])
@@ -180,8 +198,8 @@ def rest():
 
 @app.route("/reset")
 def reset():
-    session.clear()  # 모든 세션 데이터를 지웁니다
-    return redirect(url_for("index"))  # 캐릭터 선택 화면으로 리디렉션합니다
+    session.clear()  # 세션 데이터 초기화
+    return redirect(url_for("title"))  # 캐릭터 선택 화면으로 리디렉션
 
 
 @app.route("/shop")

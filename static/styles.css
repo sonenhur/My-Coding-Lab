@@ -1,3 +1,40 @@
+/* 타이틀 화면 스타일 */
+.title-container {
+  text-align: center;
+  padding-top: 50px;
+}
+
+.title-container h1 {
+  font-size: 48px;
+  color: #333; /* 어두운 회색 텍스트 */
+  margin-bottom: 30px;
+}
+
+.world-intro {
+  margin-bottom: 30px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #555; /* 중간 톤의 회색 */
+}
+
+.start-game {
+  margin-top: 20px;
+}
+
+.start-btn {
+  padding: 15px 30px;
+  font-size: 20px;
+  color: #fff; /* 흰색 텍스트 */
+  background-color: #007bff; /* 파란색 버튼 */
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+}
+
+.start-btn:hover {
+  background-color: #0056b3; /* 더 어두운 파란색 */
+}
+
 /* 기본 스타일 */
 body {
   font-family: Arial, sans-serif;
