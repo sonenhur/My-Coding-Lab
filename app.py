@@ -1,3 +1,4 @@
+import json
 import random
 
 from flask import Flask, redirect, render_template, request, session, url_for
@@ -10,30 +11,30 @@ from quest import Quest  # 퀘스트 클래스 임포트
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # 비밀 키는 안전한 방법으로 설정하는 것이 좋습니다
 
-CHARACTER_OPTIONS = [
-    {"name": "전사", "health": 130, "attack": 16, "defense": 14},
-    {"name": "궁수", "health": 100, "attack": 18, "defense": 12},
-    {"name": "마법사", "health": 90, "attack": 22, "defense": 8},
-]
 
-ENEMY_OPTIONS = [
-    {"name": "고블린", "health": 50, "attack": 15, "defense": 5},
-    {"name": "오크", "health": 80, "attack": 18, "defense": 8},
-    {"name": "드래곤", "health": 150, "attack": 25, "defense": 15},
-    {"name": "스켈레톤", "health": 60, "attack": 12, "defense": 10},
-    {"name": "트롤", "health": 100, "attack": 20, "defense": 12},
-    {"name": "늑대인간", "health": 90, "attack": 20, "defense": 10},
-    {"name": "좀비", "health": 70, "attack": 10, "defense": 8},
-    {"name": "뱀파이어", "health": 110, "attack": 18, "defense": 12},
-    {"name": "하피", "health": 80, "attack": 16, "defense": 9},
-    {"name": "슬라임", "health": 40, "attack": 8, "defense": 5},
-]
+def load_character_options(file_path="characters.json"):
+    with open(file_path, "r") as file:
+        return json.load(file)
+
+
+def load_enemy_options(file_path="enemies.json"):
+    with open(file_path, "r") as file:
+        return json.load(file)
+
+
+CHARACTER_OPTIONS = load_character_options()
+ENEMY_OPTIONS = load_enemy_options()
 
 
 def get_enemy_for_level(level):
     # 적의 레벨 범위 설정
-    max_enemy_level = min(level, len(ENEMY_OPTIONS))
-    eligible_enemies = ENEMY_OPTIONS[:max_enemy_level]
+    min_level = max(1, level - 2)  # 현재 레벨에서 -2 레벨까지의 적도 등장 가능하게
+    max_enemy_level = min(
+        level + 2, len(ENEMY_OPTIONS)
+    )  # 현재 레벨에서 +2 레벨까지의 적도 등장 가능하게
+    eligible_enemies = ENEMY_OPTIONS[
+        min_level - 1 : max_enemy_level
+    ]  # 범위 내의 적 선택
     return random.choice(eligible_enemies)
 
 
@@ -42,8 +43,7 @@ def index():
     player_data = session.get("player")
     if not player_data:
         return render_template("character_selection.html", characters=CHARACTER_OPTIONS)
-    player = Character.from_dict(player_data)
-    return render_template("index.html", player=player)
+    return render_template("index.html", player=player_data)  # from_dict 생략 가능
 
 
 @app.route("/select_character", methods=["POST"])
@@ -73,6 +73,8 @@ def battle_page():
         return redirect(url_for("index"))
 
     player = Character.from_dict(player_data)
+    print(f"Player inventory in battle: {player.inventory}")  # 디버깅 출력
+
     enemy = get_enemy_for_level(player.level)
     enemy = Character(**enemy)
     session["enemy"] = enemy.to_dict()
@@ -90,10 +92,10 @@ def action():
     player = Character.from_dict(player_data)
     enemy = Character.from_dict(enemy_data)
     action = request.form.get("action")
-    item_name = request.form.get("item_name")
+    item_index = request.form.get("item_index", type=int)
 
     status, message, experience_reward, gold_reward = battle(
-        player, enemy, action, item_name
+        player, enemy, action, item_index
     )
 
     session["player"] = player.to_dict()
@@ -182,7 +184,7 @@ def shop():
 
     player = Character.from_dict(player_data)
     items = get_items()
-    return render_template("shop.html", player=player, items=items)
+    return render_template("shop.html", items=items, player=player)
 
 
 @app.route("/buy", methods=["POST"])
@@ -193,8 +195,13 @@ def buy():
 
     player = Character.from_dict(player_data)
     item_name = request.form.get("item_name")
-    success, message = buy_item(player, item_name)  # buy_item 호출
-    session["player"] = player.to_dict()
+    success, message = buy_item(player, item_name)
+    if success:
+        session["player"] = player.to_dict()
+        print(
+            f"Updated player inventory after purchase: {player.inventory}"
+        )  # 디버깅 출력
+
     items = get_items()
     return render_template("shop.html", items=items, player=player, message=message)
 

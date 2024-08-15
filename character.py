@@ -1,4 +1,4 @@
-from items import Item  # `items.py`에서 `Item` 클래스를 임포트
+from items import Item, get_items  # `items.py`에서 `Item` 클래스를 임포트
 from quest import Quest
 
 
@@ -144,24 +144,3 @@ class CharacterItem:
             effect=data["effect"],
             price=data["price"],
         )
-
-
-def get_items():
-    return [Item("Potion", "heal", 20), Item("Elixir", "buff", 50)]
-
-
-def buy_item(character, item_name):
-    items = get_items()
-    item = next(
-        (item for item in items if item.name.lower() == item_name.lower()), None
-    )
-
-    if item:
-        if character.gold >= item.price:
-            character.gold -= item.price
-            character.inventory.append(item)
-            return True, f"아이템 '{item.name}'을(를) 구매했습니다."
-        else:
-            return False, "골드가 부족합니다."
-    else:
-        return False, f"아이템 '{item_name}'을(를) 찾을 수 없습니다."

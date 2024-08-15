@@ -4,12 +4,15 @@ class Item:
         self.effect = effect
         self.price = price
 
+    def __str__(self):
+        return f"{self.name} - {self.effect} (가격: {self.price})"
+
     def use(self, target):
         effect_methods = {
             "heal": self.apply_heal,
             "buff": self.apply_buff,
         }
-        method = effect_methods.get(self.effect.lower())  # 효과를 소문자로 변환
+        method = effect_methods.get(self.effect.lower())
         if method:
             method(target)
         else:

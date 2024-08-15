@@ -1,0 +1,11 @@
+<!-- inventory.html -->
+<ul>
+  {% if player.inventory %} {% for item in player.inventory %}
+  <li>
+    {{ loop.index }}: {{ item.name }} - {{ item.effect }} (가격: {{ item.price
+    }})
+  </li>
+  {% endfor %} {% else %}
+  <li>소유한 아이템이 없습니다.</li>
+  {% endif %}
+</ul>

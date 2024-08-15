@@ -3,7 +3,7 @@
 from character import Character
 
 
-def battle(player: Character, enemy: Character, action: str, item_name: str = None):
+def battle(player: Character, enemy: Character, action: str, item_index: int = None):
     message = ""
     experience_reward = 0
     gold_reward = 0
@@ -15,7 +15,7 @@ def battle(player: Character, enemy: Character, action: str, item_name: str = No
     elif action == "defend":
         message = f"{player.name}가 방어했습니다."
     elif action == "item":
-        item_used, message = use_item(player, item_name)
+        item_used, message = use_item(player, item_index)
         if not item_used:
             return "continue", message, experience_reward, gold_reward
     elif action == "run":
@@ -46,10 +46,13 @@ def battle(player: Character, enemy: Character, action: str, item_name: str = No
     return "continue", message, experience_reward, gold_reward
 
 
-def use_item(character: Character, item_name: str):
-    item = next((i for i in character.inventory if i.name == item_name), None)
-    if item:
+def use_item(character, item_index):
+    try:
+        item = character.inventory[
+            item_index - 1
+        ]  # 1부터 시작하는 번호를 0 인덱스로 변환
         item.use(character)
-        character.inventory.remove(item)
+        character.inventory.pop(item_index - 1)
         return True, f"{item.name}을(를) 사용했습니다."
-    return False, "아이템을 찾을 수 없습니다."
+    except IndexError:
+        return False, "잘못된 아이템 번호입니다."

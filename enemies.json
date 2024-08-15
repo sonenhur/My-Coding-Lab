@@ -1,0 +1,62 @@
+[
+    {
+        "name": "고블린",
+        "health": 50,
+        "attack": 15,
+        "defense": 5
+    },
+    {
+        "name": "오크",
+        "health": 80,
+        "attack": 18,
+        "defense": 8
+    },
+    {
+        "name": "드래곤",
+        "health": 150,
+        "attack": 25,
+        "defense": 15
+    },
+    {
+        "name": "스켈레톤",
+        "health": 60,
+        "attack": 12,
+        "defense": 10
+    },
+    {
+        "name": "트롤",
+        "health": 100,
+        "attack": 20,
+        "defense": 12
+    },
+    {
+        "name": "늑대인간",
+        "health": 90,
+        "attack": 20,
+        "defense": 10
+    },
+    {
+        "name": "좀비",
+        "health": 70,
+        "attack": 10,
+        "defense": 8
+    },
+    {
+        "name": "뱀파이어",
+        "health": 110,
+        "attack": 18,
+        "defense": 12
+    },
+    {
+        "name": "하피",
+        "health": 80,
+        "attack": 16,
+        "defense": 9
+    },
+    {
+        "name": "슬라임",
+        "health": 40,
+        "attack": 8,
+        "defense": 5
+    }
+]

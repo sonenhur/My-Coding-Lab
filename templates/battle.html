@@ -21,15 +21,8 @@
           <p>방어력: {{ player.defense }}</p>
           <p>골드: {{ player.gold }}</p>
           <h2>아이템</h2>
-          <ul>
-            {% if player.inventory %} {% for item in player.inventory %}
-            <li>
-              {{ item.name }} - {{ item.effect }} (가격: {{ item.price }})
-            </li>
-            {% endfor %} {% else %}
-            <li>소유한 아이템이 없습니다.</li>
-            {% endif %}
-          </ul>
+          <!-- 인벤토리 표시: inventory.html 포함 -->
+          {% include "inventory.html" with context %}
         </div>
         <div class="enemy-stats">
           <h2>{{ enemy.name }}</h2>
@@ -46,8 +39,14 @@
           <button type="submit" name="action" value="attack">공격</button>
           <button type="submit" name="action" value="defend">방어</button>
           <button type="submit" name="action" value="run">도망</button>
+          <!-- 아이템 사용 버튼 및 번호 입력 -->
           <button type="submit" name="action" value="item">아이템 사용</button>
-          <input type="text" name="item_name" placeholder="아이템 이름" />
+          <input
+            type="number"
+            name="item_index"
+            placeholder="아이템 번호"
+            min="1"
+          />
         </form>
       </div>
     </div>
