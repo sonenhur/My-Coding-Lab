@@ -1,5 +1,6 @@
 import json
 import random
+import re
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
@@ -10,6 +11,11 @@ from quest import Quest  # 퀘스트 클래스 임포트
 
 app = Flask(__name__)
 app.secret_key = "your_secret_key"  # 비밀 키는 안전한 방법으로 설정하는 것이 좋습니다
+
+
+# 정규 표현식을 사용하여 특수문자 검사를 추가
+def is_valid_name(name):
+    return re.match("^[a-zA-Z0-9가-힣]+$", name) is not None
 
 
 def load_character_options(file_path="characters.json"):
@@ -38,12 +44,6 @@ def get_enemy_for_level(level):
     return random.choice(eligible_enemies)
 
 
-# @app.route("/")
-# def index():
-#     player_data = session.get("player")
-#     if not player_data:
-#         return render_template("character_selection.html", characters=CHARACTER_OPTIONS)
-#     return render_template("index.html", player=player_data)  # from_dict 생략 가능
 @app.route("/")
 def title():
     return render_template("title.html")
@@ -67,7 +67,11 @@ def character_selection():
 @app.route("/select_character", methods=["POST"])
 def select_character():
     selected_character = request.form.get("character")
-    player_name = request.form.get("player_name")  # 플레이어 이름 가져오기
+    player_name = request.form.get("player_name").strip()  # 유저 이름 가져오기
+
+    # 유저 이름에 특수문자가 포함되었는지 검사
+    if not is_valid_name(player_name):
+        return "이름에는 영문, 숫자, 한글만 사용할 수 있습니다.", 400
 
     character_data = next(
         (char for char in CHARACTER_OPTIONS if char["name"] == selected_character), None
@@ -198,8 +202,8 @@ def rest():
 
 @app.route("/reset")
 def reset():
-    session.clear()  # 세션 데이터 초기화
-    return redirect(url_for("title"))  # 캐릭터 선택 화면으로 리디렉션
+    session.clear()  # 세션 데이터 완전히 초기화
+    return redirect(url_for("title"))  # 타이틀 화면으로 리디렉션
 
 
 @app.route("/shop")
