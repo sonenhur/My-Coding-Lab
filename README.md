@@ -74,5 +74,3 @@ textRPG/
 │   └── styles.css                # 메인 스타일시트
 ├── README.md                     # 프로젝트 설명 파일
 └── requirements.txt              # 프로젝트 종속성 목록
-
----
