@@ -14,6 +14,7 @@
       <h1>캐릭터 선택</h1>
       <form action="{{ url_for('select_character') }}" method="post">
         <div class="character-options">
+          <!-- 캐릭터 직업 선택 -->
           {% for character in characters %}
           <div class="character-option">
             <input
@@ -33,6 +34,11 @@
             </label>
           </div>
           {% endfor %}
+        </div>
+        <!-- 플레이어 이름 입력 필드 추가 -->
+        <div class="player-name">
+          <label for="player_name">이름:</label>
+          <input type="text" id="player_name" name="player_name" required />
         </div>
         <button type="submit">게임 시작</button>
       </form>

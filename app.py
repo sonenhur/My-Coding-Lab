@@ -49,13 +49,21 @@ def index():
 @app.route("/select_character", methods=["POST"])
 def select_character():
     selected_character = request.form.get("character")
+    player_name = request.form.get("player_name")  # 플레이어 이름 가져오기
+
     character_data = next(
         (char for char in CHARACTER_OPTIONS if char["name"] == selected_character), None
     )
     if not character_data:
         return "Invalid character selected", 400
 
-    player = Character(**character_data)
+    # 플레이어 이름과 직업을 결합하여 캐릭터 이름 생성
+    full_name = f"{character_data['name']} {player_name}"
+
+    # character_data에서 name 키 제거
+    character_data.pop("name")
+
+    player = Character(name=full_name, **character_data)
     player.gold = 100  # 초기 골드를 설정합니다.
 
     # 퀘스트 예시 추가

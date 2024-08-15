@@ -24,7 +24,9 @@ h1 {
 .stats,
 .actions,
 .battle-info,
-.item-list {
+.item-list,
+.character-options,
+.player-name {
   margin-bottom: 20px;
 }
 
@@ -87,18 +89,34 @@ a:hover {
   background-color: #5a6268; /* 더 어두운 회색 버튼 배경 */
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="radio"] {
   padding: 10px;
   border: 1px solid #ccc; /* 연한 회색 테두리 */
   border-radius: 5px;
+  margin-right: 10px;
 }
 
 .character-option {
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
 }
 
 label {
   margin-left: 10px;
+}
+
+.player-name label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333; /* 어두운 회색 텍스트 */
+}
+
+.player-name input[type="text"] {
+  width: 100%;
+  box-sizing: border-box; /* 전체 너비 포함 */
 }
 
 .action-btn {
@@ -122,5 +140,14 @@ label {
     width: 100%; /* 버튼의 폭을 100%로 설정 */
     margin: 10px auto; /* 버튼 간의 간격과 중앙 정렬 */
     font-size: 16px; /* 버튼 텍스트 크기 조정 */
+  }
+
+  .character-option {
+    flex-direction: column; /* 모바일에서 라디오 버튼과 라벨이 수직 정렬 */
+    align-items: flex-start;
+  }
+
+  .player-name input[type="text"] {
+    font-size: 16px; /* 모바일에서 텍스트 입력의 폰트 크기 조정 */
   }
 }

@@ -28,7 +28,9 @@ def battle(player: Character, enemy: Character, action: str, item_index: int = N
     # 적이 살아있는 경우, 적의 반격 처리
     if enemy.is_alive():
         damage = enemy.attack_target(player)
-        message += f" {enemy.name}가 {player.name}에게 {damage}의 피해를 입혔습니다."
+        message += (
+            f" {enemy.name}(이)가 {player.name}에게 {damage}의 피해를 입혔습니다."
+        )
 
     # 전투 결과 처리
     if player.is_alive() and not enemy.is_alive():
