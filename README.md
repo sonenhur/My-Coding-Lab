@@ -55,18 +55,24 @@
 
    웹 브라우저를 열고 `http://127.0.0.1:5000`으로 이동하여 게임을 플레이합니다.
 
-## 디렉토리 구조
+## 프로젝트 디렉토리 구조
 
-- `app.py`: Flask 애플리케이션의 메인 파일
-- `character.py`: 캐릭터 및 아이템 클래스 정의
-- `templates/`: HTML 템플릿 파일
-  - `battle.html`: 전투 페이지 템플릿
-  - `character_selection.html`: 캐릭터 선택 페이지 템플릿
-  - `index.html`: 게임 시작 페이지 템플릿
-  - `shop.html`: 상점 페이지 템플릿
-  - `result.html`: 게임 결과 페이지 템플릿
-- `static/`: 정적 파일 (CSS 등)
-  - `styles.css`: 스타일 시트 파일
+```plaintext
+textRPG/
+├── app.py                        # Flask 애플리케이션의 메인 파일
+├── character.py                  # Character 클래스 및 관련 로직
+├── items.py                      # Item 클래스 및 아이템 관련 로직
+├── quest.py                      # Quest 클래스 및 퀘스트 관련 로직
+├── templates/                    # HTML 템플릿 파일들이 위치한 디렉토리
+│   ├── base.html                 # 공통 레이아웃 템플릿
+│   ├── index.html                # 메인 화면 템플릿
+│   ├── character_selection.html  # 캐릭터 선택 화면 템플릿
+│   ├── battle.html               # 전투 화면 템플릿
+│   ├── inventory.html            # 인벤토리 표시 템플릿
+│   └── shop.html                 # 상점 화면 템플릿
+├── static/                       # 정적 파일 (CSS, JS, 이미지 등)
+│   └── styles.css                # 메인 스타일시트
+├── README.md                     # 프로젝트 설명 파일
+└── requirements.txt              # 프로젝트 종속성 목록
 
 ---
-
