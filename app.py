@@ -1,10 +1,12 @@
+# app.py
+
 import json
 import random
 import re
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from battle import battle, use_item  # battle.py의 함수들을 임포트
+from battle import battle  # battle.py의 함수들을 임포트
 from character import Character
 from items import buy_item, get_items
 from quest import Quest  # 퀘스트 클래스 임포트
@@ -153,15 +155,6 @@ def action():
         )
 
     return render_template("battle.html", player=player, enemy=enemy, message=message)
-
-
-def use_item(character, item_name):
-    item = next((i for i in character.inventory if i.name == item_name), None)
-    if item:
-        item.use(character)
-        character.inventory.remove(item)
-        return True, f"{item.name}을(를) 사용했습니다."
-    return False, "아이템을 찾을 수 없습니다."
 
 
 @app.route("/result/<result>")
