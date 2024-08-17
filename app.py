@@ -69,9 +69,8 @@ def character_selection():
 @app.route("/select_character", methods=["POST"])
 def select_character():
     selected_character = request.form.get("character")
-    player_name = request.form.get("player_name").strip()  # 유저 이름 가져오기
+    player_name = request.form.get("player_name").strip()
 
-    # 유저 이름에 특수문자가 포함되었는지 검사
     if not is_valid_name(player_name):
         return "이름에는 영문, 숫자, 한글만 사용할 수 있습니다.", 400
 
@@ -81,16 +80,15 @@ def select_character():
     if not character_data:
         return "Invalid character selected", 400
 
-    # 플레이어 이름과 직업을 결합하여 캐릭터 이름 생성
     full_name = f"{character_data['name']} {player_name}"
 
     # character_data에서 name 키 제거
     character_data.pop("name")
 
+    # character_data에서 level_growth 값을 전달
     player = Character(name=full_name, **character_data)
-    player.gold = 100  # 초기 골드를 설정합니다.
+    player.gold = 100
 
-    # 퀘스트 예시 추가
     quest_kill_5_enemies = Quest("적 5마리 처치", "적을 5번 처치하세요.", 5, 100)
     player.add_quest(quest_kill_5_enemies)
 

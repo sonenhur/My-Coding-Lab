@@ -25,14 +25,14 @@
   padding: 15px 30px;
   font-size: 20px;
   color: #fff; /* 흰색 텍스트 */
-  background-color: #007bff; /* 파란색 버튼 */
+  background-color: #6c757d; /* 차분한 회색 버튼 */
   border-radius: 5px;
   text-decoration: none;
   transition: background-color 0.3s;
 }
 
 .start-btn:hover {
-  background-color: #0056b3; /* 더 어두운 파란색 */
+  background-color: #5a6268; /* 더 어두운 차분한 회색 */
 }
 
 /* 기본 스타일 */
@@ -115,7 +115,7 @@ a {
   padding: 10px 20px;
   text-decoration: none;
   color: #fff; /* 흰색 텍스트 */
-  background-color: #6c757d; /* 중립적인 회색 버튼 배경 */
+  background-color: #6c757d; /* 차분한 회색 버튼 배경 */
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -123,7 +123,7 @@ a {
 
 button:hover,
 a:hover {
-  background-color: #5a6268; /* 더 어두운 회색 버튼 배경 */
+  background-color: #5a6268; /* 더 어두운 차분한 회색 버튼 배경 */
 }
 
 input[type="text"],
@@ -157,11 +157,11 @@ label {
 }
 
 .action-btn {
-  background-color: #007bff; /* 파란색 버튼 배경 */
+  background-color: #6c757d; /* 차분한 회색 버튼 배경 */
 }
 
 .action-btn:hover {
-  background-color: #0056b3; /* 더 어두운 파란색 버튼 배경 */
+  background-color: #5a6268; /* 더 어두운 차분한 회색 버튼 배경 */
 }
 
 /* 모바일 스타일 */

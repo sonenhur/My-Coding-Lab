@@ -1,3 +1,5 @@
+# character.py
+
 from items import Item, get_items  # `items.py`에서 `Item` 클래스를 임포트
 from quest import Quest
 
@@ -15,6 +17,7 @@ class Character:
         gold=0,
         inventory=None,
         quests=None,
+        level_growth=None,  # 새로운 속성 추가
     ):
         self.name = name
         self.health = health
@@ -26,6 +29,11 @@ class Character:
         self.gold = gold
         self.inventory = inventory if inventory is not None else []
         self.quests = quests if quests is not None else []  # 퀘스트 목록
+        self.level_growth = (
+            level_growth
+            if level_growth is not None
+            else {"health": 10, "attack": 2, "defense": 1}
+        )  # 기본 성장 값 설정
 
     def is_alive(self):
         return self.health > 0
@@ -44,13 +52,14 @@ class Character:
         while self.experience >= self.level * 10:
             self.level_up()
 
+    # 레벨업 메소드 수정
     def level_up(self):
         self.level += 1
-        self.max_health += 10
-        self.health = self.max_health
-        self.attack += 2
-        self.defense += 1
-        self.experience -= self.level * 10
+        self.max_health += self.level_growth["health"]
+        self.health = self.max_health  # 레벨업 시 체력 회복
+        self.attack += self.level_growth["attack"]
+        self.defense += self.level_growth["defense"]
+        self.experience = 0  # 경험치 초기화 (혹은 경험치 감소)
         print(f"{self.name}가 레벨업했습니다! 레벨: {self.level}")
 
     def to_dict(self):
@@ -124,7 +133,7 @@ class CharacterItem:
 
     def apply_heal(self, target):
         target.health = min(target.health + 20, target.max_health)
-        print(f"{target.name}가 20 HP를 회복했습니다.")
+        print(f"{target.name}(이)가 20 HP를 회복했습니다.")
 
     def apply_buff(self, target):
         target.attack += 5

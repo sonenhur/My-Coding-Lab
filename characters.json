@@ -3,18 +3,21 @@
     "name": "전사",
     "health": 130,
     "attack": 16,
-    "defense": 14
+    "defense": 14,
+    "level_growth": { "health": 12, "attack": 2, "defense": 2 }
   },
   {
     "name": "궁수",
     "health": 100,
     "attack": 18,
-    "defense": 12
+    "defense": 12,
+    "level_growth": { "health": 10, "attack": 3, "defense": 1 }
   },
   {
     "name": "마법사",
     "health": 90,
     "attack": 22,
-    "defense": 8
+    "defense": 8,
+    "level_growth": { "health": 8, "attack": 4, "defense": 1 }
   }
 ]

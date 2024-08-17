@@ -1,3 +1,4 @@
+# items.py
 class Item:
     def __init__(self, name, effect, price):
         self.name = name

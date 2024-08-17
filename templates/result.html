@@ -1,3 +1,5 @@
+<!-- result.html -->
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -11,7 +13,7 @@
   </head>
   <body>
     <div class="container">
-      <div class="result">
+      <div class="result {% if result == 'win' %}win{% else %}lose{% endif %}">
         <h1>{{ message }}</h1>
         {% if result == 'win' %}
         <div class="result-details">

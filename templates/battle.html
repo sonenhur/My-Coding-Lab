@@ -1,3 +1,5 @@
+<!-- battle.html -->
+
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -36,17 +38,40 @@
         <p>{{ message }}</p>
         {% endif %}
         <form action="{{ url_for('action') }}" method="post">
-          <button type="submit" name="action" value="attack">공격</button>
-          <button type="submit" name="action" value="defend">방어</button>
-          <button type="submit" name="action" value="run">도망</button>
-          <!-- 아이템 사용 버튼 및 번호 입력 -->
-          <button type="submit" name="action" value="item">아이템 사용</button>
-          <input
-            type="number"
-            name="item_index"
-            placeholder="아이템 번호"
-            min="1"
-          />
+          <div class="action-buttons">
+            <button
+              type="submit"
+              name="action"
+              value="attack"
+              class="action-btn"
+            >
+              공격
+            </button>
+            <button
+              type="submit"
+              name="action"
+              value="defend"
+              class="action-btn"
+            >
+              방어
+            </button>
+            <button type="submit" name="action" value="run" class="action-btn">
+              도망
+            </button>
+          </div>
+          <div class="item-use">
+            <label for="item_index">아이템 번호:</label>
+            <input
+              type="number"
+              id="item_index"
+              name="item_index"
+              placeholder="아이템 번호"
+              min="1"
+            />
+            <button type="submit" name="action" value="item" class="action-btn">
+              아이템 사용
+            </button>
+          </div>
         </form>
       </div>
     </div>
