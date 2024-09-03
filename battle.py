@@ -21,7 +21,7 @@ def battle(player: Character, enemy: Character, phase: BattlePhase, action: str 
     if phase == BattlePhase.PLAYER_TURN:
         if action == "attack":
             damage = player.attack_target(enemy)
-            message = f"{player.name}(이)가 {enemy.name}에게 {damage}의 피해를 입혔습니다."
+            message = f"{player.name}(이)가 {enemy.name}에게 {damage}의 피해를 입혔습니다.<br>"
         elif action == "defend":
             message = f"{player.name}(이)가 방어했습니다."
         elif action == "item":

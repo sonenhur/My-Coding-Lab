@@ -35,7 +35,7 @@
       </div>
       <div class="battle-info">
         {% if message %}
-        <p>{{ message }}</p>
+        <p>{{ message | safe }}</p>
         {% endif %}
         <form action="{{ url_for('action') }}" method="post">
           <div class="action-buttons">
