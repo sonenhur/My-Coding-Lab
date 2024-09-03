@@ -6,7 +6,6 @@ import re
 
 from flask import Flask, redirect, render_template, request, session, url_for
 
-from battle import battle  # battle.py의 함수들을 임포트
 from character import Character
 from items import buy_item, get_items
 from quest import Quest  # 퀘스트 클래스 임포트
@@ -41,8 +40,8 @@ def get_enemy_for_level(level):
         level + 2, len(ENEMY_OPTIONS)
     )  # 현재 레벨에서 +2 레벨까지의 적도 등장 가능하게
     eligible_enemies = ENEMY_OPTIONS[
-        min_level - 1 : max_enemy_level
-    ]  # 범위 내의 적 선택
+                       min_level - 1: max_enemy_level
+                       ]  # 범위 내의 적 선택
     return random.choice(eligible_enemies)
 
 
@@ -111,6 +110,11 @@ def battle_page():
     return render_template("battle.html", player=player, enemy=enemy)
 
 
+# app.py
+
+from battle import battle, BattlePhase  # BattlePhase 추가
+
+
 @app.route("/action", methods=["POST"])
 def action():
     player_data = session.get("player")
@@ -124,10 +128,26 @@ def action():
     action = request.form.get("action")
     item_index = request.form.get("item_index", type=int)
 
-    status, message, experience_reward, gold_reward = battle(
-        player, enemy, action, item_index
+    # 1. 플레이어 턴
+    status, message, experience_reward, gold_reward, next_phase = battle(
+        player, enemy, BattlePhase.PLAYER_TURN, action, item_index
     )
 
+    # 2. 적 턴
+    if next_phase == BattlePhase.ENEMY_TURN:
+        status, enemy_message, experience_reward, gold_reward, next_phase = battle(
+            player, enemy, BattlePhase.ENEMY_TURN
+        )
+        message += f" {enemy_message}"
+
+    # 3. 전투 종료 체크
+    if next_phase == BattlePhase.CHECK_END:
+        status, end_message, experience_reward, gold_reward, next_phase = battle(
+            player, enemy, BattlePhase.CHECK_END
+        )
+        message += f" {end_message}"
+
+    # 4. 결과에 따라 처리
     session["player"] = player.to_dict()
     session["enemy"] = enemy.to_dict()
 
