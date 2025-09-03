@@ -1,0 +1,64 @@
+<!-- character_selection.html -->
+
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>캐릭터 선택</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <script>
+      function validateForm() {
+        var playerName = document.getElementById("player_name").value;
+        var regex = /^[a-zA-Z0-9가-힣]+$/; // 영문, 숫자, 한글만 허용
+
+        if (!regex.test(playerName)) {
+          alert("이름에는 영문, 숫자, 한글만 사용할 수 있습니다.");
+          return false; // 폼 제출을 막음
+        }
+
+        return true; // 폼 제출 허용
+      }
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <h1>캐릭터 선택</h1>
+      <form
+        action="{{ url_for('select_character') }}"
+        method="post"
+        onsubmit="return validateForm()"
+      >
+        <div class="character-options">
+          {% for character in characters %}
+          <div class="character-option">
+            <input
+              type="radio"
+              id="{{ character.name | replace(' ', '-') }}"
+              name="character"
+              value="{{ character.name }}"
+              required
+            />
+            <label for="{{ character.name | replace(' ', '-') }}">
+              <div class="character-info">
+                <h2>{{ character.name }}</h2>
+                <p>체력: {{ character.health }}</p>
+                <p>공격력: {{ character.attack }}</p>
+                <p>방어력: {{ character.defense }}</p>
+              </div>
+            </label>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="player-name">
+          <label for="player_name">이름:</label>
+          <input type="text" id="player_name" name="player_name" required />
+        </div>
+        <button type="submit">게임 시작</button>
+      </form>
+    </div>
+  </body>
+</html>
