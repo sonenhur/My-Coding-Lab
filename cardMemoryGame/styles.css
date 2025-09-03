@@ -1,0 +1,120 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: #f0f0f0;
+}
+
+.game-controls {
+  text-align: center; /* 가운데 정렬 */
+  margin-bottom: 20px;
+}
+
+.game-title {
+  font-size: 24px; /* 글자 크기 조정 */
+  margin-bottom: 10px; /* 제목과 버튼 사이의 간격 조정 */
+}
+
+#startButton {
+  padding: 10px 20px;
+  font-size: 18px; /* 버튼 글자 크기 조정 */
+  cursor: pointer;
+}
+
+#timer {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+#record {
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.hidden {
+  display: none;
+}
+
+.game-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(100px, 1fr));
+  grid-template-rows: repeat(4, minmax(100px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.card {
+  width: 100%;
+  padding-bottom: 100%;
+  background: #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  perspective: 1000px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+}
+
+.card img,
+.card .back {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  backface-visibility: hidden;
+  transition: opacity 0.5s;
+}
+
+.card img {
+  transform: rotateY(180deg);
+}
+
+.card .back {
+  background: #808080;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card.matched {
+  background: #6884b3;
+  cursor: default;
+}
+
+@media (max-width: 768px) {
+  .game-board {
+    max-width: 100%;
+    padding: 5px;
+  }
+}
+
+@media (max-width: 480px) {
+  .game-title {
+    font-size: 20px; /* 작은 화면에서 제목 글자 크기 조정 */
+  }
+
+  #startButton {
+    font-size: 16px; /* 작은 화면에서 버튼 글자 크기 조정 */
+  }
+
+  #timer,
+  #record {
+    font-size: 16px; /* 작은 화면에서 타이머와 기록 글자 크기 조정 */
+  }
+}
