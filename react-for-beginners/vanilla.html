@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<!-- HTML 문서의 버전을 정의합니다. 여기서는 HTML5를 사용하고 있습니다. -->
+<html>
+  <!-- HTML 문서의 루트 요소입니다. -->
+  <body>
+    <!-- 웹페이지의 본문을 나타내는 요소입니다. -->
+    <span>Total clicks: 0</span>
+    <!-- 클릭 횟수를 표시하는 요소입니다. -->
+    <button id="btn">Click me</button>
+    <!-- 사용자가 클릭할 수 있는 버튼 요소입니다. -->
+  </body>
+  <script>
+    <!-- 웹페이지에 JavaScript 코드를 포함시키는 요소입니다. -->
+    let counter = 0; // 클릭 횟수를 저장하는 변수입니다.
+    const button = document.getElementById("btn"); // 버튼 요소를 참조하는 변수입니다.
+    const span = document.querySelector("span"); // 클릭 횟수를 표시하는 span 요소를 참조하는 변수입니다.
+    function handleClick() {
+      // 버튼 클릭 시 실행되는 함수입니다.
+      counter = counter + 1; // 클릭 횟수를 1 증가시킵니다.
+      span.innerText = `Total clicks: ${counter}`; // span 요소의 텍스트를 업데이트하여 클릭 횟수를 표시합니다.
+    }
+    button.addEventListener("click", handleClick); // 버튼에 클릭 이벤트 리스너를 추가합니다. 버튼이 클릭되면 handleClick 함수가 실행됩니다.
+  </script>
+</html>
